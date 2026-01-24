@@ -11,13 +11,12 @@ def setup_logging():
     log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 
     formatter = logging.Formatter(
-        "%(asctime)s [%(levelname)s] "
-        "%(name)s:%(lineno)d - %(message)s"
+        "%(asctime)s [%(levelname)s] %(name)s:%(lineno)d - %(message)s"
     )
 
     file_handler = RotatingFileHandler(
         LOG_FILE,
-        maxBytes=100 * 1024 * 1024, # 100MB
+        maxBytes=100 * 1024 * 1024,  # 100MB
         backupCount=5
     )
     file_handler.setFormatter(formatter)
@@ -30,7 +29,9 @@ def setup_logging():
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
 
-    # Prevent duplicate logs on reload
-    if not root_logger.handlers:
+    if not any(isinstance(h, RotatingFileHandler) for h in root_logger.handlers):
         root_logger.addHandler(file_handler)
         root_logger.addHandler(console_handler)
+
+    # Explicitly enable request logger
+    logging.getLogger("api.request").setLevel(log_level)
