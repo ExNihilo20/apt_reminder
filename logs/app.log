@@ -1,0 +1,2 @@
+2026-01-24 19:16:59,018 [INFO] app.main:19 - Application startup
+2026-01-24 19:16:59,019 [INFO] app.main:20 - Connected to MongoDB database: reminder
