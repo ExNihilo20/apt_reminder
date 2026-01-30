@@ -39,3 +39,32 @@
 2026-01-24 19:47:17,258 [INFO] app.main:22 - Application startup
 2026-01-24 19:47:17,258 [INFO] app.main:23 - Connected to MongoDB database: reminder
 2026-01-24 19:47:28,142 [INFO] api.request:29 - request_id=b2fc89ca-19fc-47d0-a8e8-92de9a07d4d1 method=GET path=/health status=200 duration_ms=2.26 client_ip=172.19.0.1
+2026-01-24 19:52:51,214 [INFO] app.main:22 - Application startup
+2026-01-24 19:52:51,214 [INFO] app.main:23 - Connected to MongoDB database: reminder
+2026-01-30 21:40:45,514 [INFO] app.main:42 - Application startup
+2026-01-30 21:40:45,514 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-01-30 21:41:10,319 [INFO] app.main:60 - Health check detailed status=ok mongo_status=up uptime=24.81s
+2026-01-30 21:41:10,320 [INFO] api.request:29 - request_id=601bd536-d81b-4c36-b0b2-66f3d9095ee8 method=GET path=/health/detailed status=200 duration_ms=2.79 client_ip=172.19.0.1
+2026-01-30 21:41:10,348 [INFO] api.request:29 - request_id=b7659d31-5f1e-42f8-abfe-63f9abe6d3e3 method=GET path=/favicon.ico status=404 duration_ms=0.32 client_ip=172.19.0.1
+2026-01-30 21:41:38,246 [INFO] app.main:60 - Health check detailed status=ok mongo_status=up uptime=52.74s
+2026-01-30 21:41:38,247 [INFO] api.request:29 - request_id=749bc068-c1f2-49e1-af2a-ea7705287f55 method=GET path=/health/detailed status=200 duration_ms=2.70 client_ip=172.19.0.1
+2026-01-30 21:41:45,736 [INFO] app.main:60 - Health check detailed status=ok mongo_status=up uptime=60.23s
+2026-01-30 21:41:45,737 [INFO] api.request:29 - request_id=e39c9875-55cb-4d01-87f0-b2a3e32d0057 method=GET path=/health/detailed status=200 duration_ms=2.31 client_ip=172.19.0.1
+2026-01-30 21:41:57,192 [INFO] app.main:60 - Health check detailed status=ok mongo_status=up uptime=71.68s
+2026-01-30 21:41:57,193 [INFO] api.request:29 - request_id=ab62fc14-4ea4-483d-820d-4c7699e9f05f method=GET path=/health/detailed status=200 duration_ms=2.48 client_ip=172.19.0.1
+2026-01-30 21:42:41,786 [INFO] app.main:42 - Application startup
+2026-01-30 21:42:41,787 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-01-30 21:42:55,725 [INFO] app.main:42 - Application startup
+2026-01-30 21:42:55,725 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-01-30 21:42:57,022 [INFO] app.main:60 - Health check detailed status=ok mongo_status=up uptime=1.30s
+2026-01-30 21:42:57,023 [INFO] api.request:29 - request_id=afa0efa4-af97-4682-b95f-3754fed39cb7 method=GET path=/health/detailed status=200 duration_ms=4.65 client_ip=172.19.0.1
+2026-01-30 21:43:03,851 [INFO] app.main:60 - Health check detailed status=ok mongo_status=up uptime=8.13s
+2026-01-30 21:43:03,852 [INFO] api.request:29 - request_id=61b436e7-52a8-42ec-b1d9-9e649afa65b4 method=GET path=/health/detailed status=200 duration_ms=3.62 client_ip=172.19.0.1
+2026-01-30 21:43:28,416 [INFO] app.main:42 - Application startup
+2026-01-30 21:43:28,416 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-01-30 21:43:28,835 [INFO] app.main:42 - Application startup
+2026-01-30 21:43:28,835 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-01-30 21:43:31,351 [INFO] app.main:60 - Health check detailed status=ok mongo_status=up uptime=2.52s
+2026-01-30 21:43:31,352 [INFO] api.request:29 - request_id=62c20a21-603f-4c7d-9f13-333cb476415a method=GET path=/health/detailed status=200 duration_ms=3.65 client_ip=172.19.0.1
+2026-01-30 21:46:50,575 [INFO] app.main:42 - Application startup
+2026-01-30 21:46:50,575 [INFO] app.main:43 - Connected to MongoDB database: reminder
