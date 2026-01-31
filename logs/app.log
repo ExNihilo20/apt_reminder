@@ -68,3 +68,15 @@
 2026-01-30 21:43:31,352 [INFO] api.request:29 - request_id=62c20a21-603f-4c7d-9f13-333cb476415a method=GET path=/health/detailed status=200 duration_ms=3.65 client_ip=172.19.0.1
 2026-01-30 21:46:50,575 [INFO] app.main:42 - Application startup
 2026-01-30 21:46:50,575 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-01-31 02:03:13,429 [INFO] app.main:47 - Application startup
+2026-01-31 02:03:13,429 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-01-31 02:03:14,273 [INFO] app.main:47 - Application startup
+2026-01-31 02:03:14,273 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-01-31 02:03:17,689 [INFO] app.main:47 - Application startup
+2026-01-31 02:03:17,689 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-01-31 02:03:28,464 [INFO] app.main:47 - Application startup
+2026-01-31 02:03:28,465 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-01-31 02:03:40,857 [INFO] app.main:65 - Health check detailed status=ok mongo_status=up uptime=12.45s
+2026-01-31 02:03:40,859 [INFO] api.request:29 - request_id=b5356218-19be-4881-8dde-86a8a8937196 method=GET path=/health/detailed status=200 duration_ms=12.01 client_ip=172.19.0.1
+2026-01-31 02:03:49,637 [INFO] app.main:83 - Creating contact firstname=John lastname=Doe phone=(207) 555-1234
+2026-01-31 02:03:49,656 [INFO] api.request:29 - request_id=4d3d7652-f751-4067-942b-792571cb445d method=POST path=/contacts status=201 duration_ms=29.88 client_ip=172.19.0.1

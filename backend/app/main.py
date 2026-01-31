@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import os
 from pymongo import MongoClient
 import logging
@@ -6,6 +6,8 @@ import time
 
 from app.logging_config import setup_logging
 from app.middleware.request_logging import request_logging_middleware
+from app.repositories.contact_repository import ContactRepository
+from app.models.contact import CreateContact, ContactResponse
 
 APP_START_TIME = time.time()
 
@@ -19,6 +21,9 @@ app.middleware("http")(request_logging_middleware)
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri)
 db = client.get_database()
+# wiring Mongo connection
+contacts_collection = db["contacts"]
+contact_repo = ContactRepository(contacts_collection)
 
 def check_mongo_health():
     start = time.time()
@@ -72,4 +77,24 @@ def detailed_health_check():
             "mongo": mongo_health
         }
     }
+
+@app.post("/contacts", response_model=ContactResponse, status_code=201)
+def create_contact(contact: CreateContact):
+    logger.info(
+        "Creating contact firstname=%s lastname=%s phone=%s",
+        contact.firstname,
+        contact.lastname,
+        contact.phone_number
+    )
+
+    contact_dict = contact.dict()
+
+    # Normalize phone number
+    contact_dict["phone_number"] = "".join(
+        filter(str.isdigit, contact_dict["phone_number"])
+    )
+
+    created = contact_repo.create_contact(contact_dict)
+
+    return created
 
