@@ -10,3 +10,12 @@ class ContactRepository:
         contact_data["created_at"] = datetime.now()
         self.collection.insert_one(contact_data)
         return contact_data
+    
+    def get_all_contacts(self) ->list[dict]:
+        contacts = list(
+            self.collection.find(
+                {},
+                {"_id": 0} # exclude the Mongo internal ID
+            )
+        )
+        return contacts

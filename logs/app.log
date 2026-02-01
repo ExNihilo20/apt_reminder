@@ -80,3 +80,142 @@
 2026-01-31 02:03:40,859 [INFO] api.request:29 - request_id=b5356218-19be-4881-8dde-86a8a8937196 method=GET path=/health/detailed status=200 duration_ms=12.01 client_ip=172.19.0.1
 2026-01-31 02:03:49,637 [INFO] app.main:83 - Creating contact firstname=John lastname=Doe phone=(207) 555-1234
 2026-01-31 02:03:49,656 [INFO] api.request:29 - request_id=4d3d7652-f751-4067-942b-792571cb445d method=POST path=/contacts status=201 duration_ms=29.88 client_ip=172.19.0.1
+2026-01-31 17:18:15,009 [INFO] app.main:65 - Health check detailed status=ok mongo_status=up uptime=54886.61s
+2026-01-31 17:18:15,010 [INFO] api.request:29 - request_id=ee8d3477-ccd8-446a-9c6e-2cb9413d58f1 method=GET path=/health/detailed status=200 duration_ms=3.17 client_ip=172.19.0.1
+2026-02-01 14:41:12,925 [INFO] app.main:47 - Application startup
+2026-02-01 14:41:12,925 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:41:44,771 [INFO] app.main:47 - Application startup
+2026-02-01 14:41:44,771 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:41:50,301 [INFO] app.main:47 - Application startup
+2026-02-01 14:41:50,301 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:41:52,677 [INFO] app.main:47 - Application startup
+2026-02-01 14:41:52,677 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:41:55,619 [INFO] app.main:47 - Application startup
+2026-02-01 14:41:55,619 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:41:57,652 [INFO] app.main:47 - Application startup
+2026-02-01 14:41:57,652 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:42:00,707 [INFO] app.main:47 - Application startup
+2026-02-01 14:42:00,707 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:42:03,106 [INFO] app.main:47 - Application startup
+2026-02-01 14:42:03,107 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:42:11,331 [INFO] app.main:47 - Application startup
+2026-02-01 14:42:11,331 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:42:19,173 [INFO] app.main:47 - Application startup
+2026-02-01 14:42:19,173 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:42:21,077 [INFO] app.main:47 - Application startup
+2026-02-01 14:42:21,077 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:42:59,891 [INFO] app.main:47 - Application startup
+2026-02-01 14:42:59,891 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:43:13,991 [INFO] app.main:47 - Application startup
+2026-02-01 14:43:13,991 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:43:25,020 [INFO] app.main:47 - Application startup
+2026-02-01 14:43:25,020 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:43:30,052 [INFO] app.main:47 - Application startup
+2026-02-01 14:43:30,052 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:43:30,946 [INFO] app.main:48 - Application startup
+2026-02-01 14:43:30,946 [INFO] app.main:49 - Connected to MongoDB database: reminder
+2026-02-01 14:43:35,254 [INFO] app.main:47 - Application startup
+2026-02-01 14:43:35,254 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:43:45,328 [INFO] app.main:47 - Application startup
+2026-02-01 14:43:45,328 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:44:38,189 [INFO] app.main:47 - Application startup
+2026-02-01 14:44:38,189 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:44:42,182 [INFO] app.main:47 - Application startup
+2026-02-01 14:44:42,183 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:44:48,296 [INFO] app.main:47 - Application startup
+2026-02-01 14:44:48,296 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:44:50,708 [INFO] app.main:47 - Application startup
+2026-02-01 14:44:50,708 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:44:57,632 [INFO] app.main:47 - Application startup
+2026-02-01 14:44:57,632 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:02,405 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:02,406 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:05,858 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:05,858 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:09,537 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:09,537 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:13,782 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:13,782 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:15,636 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:15,636 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:17,947 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:17,947 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:21,421 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:21,421 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:37,108 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:37,109 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:45:38,370 [INFO] app.main:47 - Application startup
+2026-02-01 14:45:38,370 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:46:02,585 [INFO] app.main:47 - Application startup
+2026-02-01 14:46:02,586 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:46:13,242 [INFO] api.request:29 - request_id=1fbc9aa3-950d-4d44-80dc-f8fccb8af38b method=GET path=/health/contacts status=404 duration_ms=0.45 client_ip=172.19.0.1
+2026-02-01 14:46:25,577 [INFO] app.main:103 - Retrieving all contacts
+2026-02-01 14:46:25,578 [ERROR] api.request:17 - request_id=34855e48-b907-4a59-909d-2e4d58a0c88f method=GET path=/contacts unhandled exception
+Traceback (most recent call last):
+  File "/app/app/middleware/request_logging.py", line 14, in request_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/app/main.py", line 105, in get_all_contacts
+    contacts = contact_repo.get_all_contacts()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: ContactRepository.get_all_contacts() missing 1 required positional argument: 'contact_data'
+2026-02-01 14:46:25,585 [INFO] api.request:29 - request_id=34855e48-b907-4a59-909d-2e4d58a0c88f method=GET path=/contacts status=500 duration_ms=10.06 client_ip=172.19.0.1
+2026-02-01 14:48:36,928 [INFO] app.main:47 - Application startup
+2026-02-01 14:48:36,928 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:51:10,573 [INFO] app.main:47 - Application startup
+2026-02-01 14:51:10,573 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:52:02,078 [INFO] app.main:47 - Application startup
+2026-02-01 14:52:02,079 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:52:03,008 [INFO] app.main:47 - Application startup
+2026-02-01 14:52:03,008 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:52:11,915 [INFO] app.main:47 - Application startup
+2026-02-01 14:52:11,915 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:52:36,614 [INFO] app.main:47 - Application startup
+2026-02-01 14:52:36,614 [INFO] app.main:48 - Connected to MongoDB database: reminder
+2026-02-01 14:52:42,541 [INFO] app.main:103 - Retrieving all contacts
+2026-02-01 14:52:42,583 [INFO] api.request:29 - request_id=f0c6bc3c-79a6-4cc6-b04a-529a0a7cf6f4 method=GET path=/contacts status=200 duration_ms=46.98 client_ip=172.19.0.1

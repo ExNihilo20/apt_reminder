@@ -3,7 +3,7 @@ import os
 from pymongo import MongoClient
 import logging
 import time
-
+from typing import List
 from app.logging_config import setup_logging
 from app.middleware.request_logging import request_logging_middleware
 from app.repositories.contact_repository import ContactRepository
@@ -98,3 +98,9 @@ def create_contact(contact: CreateContact):
 
     return created
 
+@app.get("/contacts", response_model=List[ContactResponse])
+def get_all_contacts():
+    logger.info("Retrieving all contacts")
+
+    contacts = contact_repo.get_all_contacts()
+    return contacts
