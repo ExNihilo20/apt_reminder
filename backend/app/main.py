@@ -104,3 +104,43 @@ def get_all_contacts():
 
     contacts = contact_repo.get_all_contacts()
     return contacts
+
+@app.get("/contacts/lookup", response_model=ContactResponse)
+def lookup_contact(
+        phone_number: str | None = None,
+        firstname: str | None = None,
+        lastname: str | None = None
+):
+    logger.info(
+        "Lookup contact phone=%s firstname=%s lastname=%s",
+        phone_number,
+        firstname,
+        lastname
+    )
+
+    # 1. lookup by phone number first (highest priority)
+    if phone_number:
+        normalized_phone = "".join(filter(str.isdigit, phone_number))
+        contact = contact_repo.get_by_phone_number(normalized_phone)
+
+        if contact:
+            return contact
+    
+    # 2. Name fallback (requires both names)
+    if firstname and lastname:
+        matches = contact_repo.get_by_name(firstname, lastname)
+
+        if len(matches) == 1:
+            return matches[0]
+    
+        if len(matches) > 1:
+            raise HTTPException(
+                status_code=409,
+                detail="Multiple contacts found with the same name"
+            )
+    
+    #3 Nothing found
+    raise HTTPException(
+        status_code=404,
+        detail="Contact not found"
+    )

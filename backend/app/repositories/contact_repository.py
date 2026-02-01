@@ -19,3 +19,20 @@ class ContactRepository:
             )
         )
         return contacts
+    
+    def get_by_phone_number(self, phone_number: str) -> dict | None:
+        return self.collection.find_one(
+            {"phone_number": phone_number},
+            {"_id": 0}
+        )
+    
+    def get_by_name(self, firstname: str, lastname:str) -> list[dict]:
+        return list(
+            self.collection.find(
+                {
+                    "firstname": firstname,
+                    "lastname": lastname
+                },
+                {"_id": 0}
+            )
+        )
