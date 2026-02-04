@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from pymongo.errors import DuplicateKeyError
 from datetime import datetime
 from typing import List
 
@@ -17,12 +18,16 @@ def create_contact(
     contact: ContactCreate,
     repo: ContactRepository = Depends(get_contact_repository),
 ):
-    # Build Mongo document from validated Pydantic model
     contact_doc = contact.model_dump()
     contact_doc["created_at"] = datetime.utcnow()
 
-    # Persist
-    created = repo.create_contact(contact_doc)
+    try:
+        created = repo.create_contact(contact_doc)
+    except DuplicateKeyError:
+        raise HTTPException(
+            status_code=409,
+            detail="A contact with this phone_number already exists"
+        )
 
     if not created:
         raise HTTPException(
@@ -30,8 +35,8 @@ def create_contact(
             detail="Failed to create contact"
         )
 
-    # Repository returns a dict shaped like ContactOut
     return created
+
 
 @router.get("", response_model=List[ContactOut])
 def get_contacts(

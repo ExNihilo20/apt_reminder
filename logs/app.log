@@ -396,3 +396,220 @@ TypeError: 'Collection' object is not callable. If you meant to call the 'find_i
 2026-02-04 15:43:21,137 [INFO] app.main:36 - Application startup
 2026-02-04 15:43:21,142 [INFO] app.main:41 - Connected to MongoDB database: reminder
 2026-02-04 15:43:56,123 [INFO] api.request:29 - request_id=378a5e64-9b79-453d-8ea3-d33246f1e4ee method=GET path=/contacts status=200 duration_ms=9.53 client_ip=172.19.0.1
+2026-02-04 15:47:21,981 [INFO] app.main:36 - Application startup
+2026-02-04 15:47:21,986 [INFO] app.main:41 - Connected to MongoDB database: reminder
+2026-02-04 15:47:25,590 [INFO] app.main:36 - Application startup
+2026-02-04 15:47:25,594 [INFO] app.main:41 - Connected to MongoDB database: reminder
+2026-02-04 15:47:31,948 [INFO] app.main:36 - Application startup
+2026-02-04 15:47:31,952 [INFO] app.main:41 - Connected to MongoDB database: reminder
+2026-02-04 15:47:47,134 [INFO] app.main:36 - Application startup
+2026-02-04 15:47:47,139 [INFO] app.main:41 - Connected to MongoDB database: reminder
+2026-02-04 15:47:48,883 [INFO] app.main:36 - Application startup
+2026-02-04 15:47:48,888 [INFO] app.main:41 - Connected to MongoDB database: reminder
+2026-02-04 15:47:50,325 [INFO] app.main:36 - Application startup
+2026-02-04 15:47:50,330 [INFO] app.main:41 - Connected to MongoDB database: reminder
+2026-02-04 15:48:26,157 [INFO] app.main:36 - Application startup
+2026-02-04 15:48:26,161 [INFO] app.main:41 - Connected to MongoDB database: reminder
+2026-02-04 15:48:38,309 [INFO] app.main:36 - Application startup
+2026-02-04 15:48:38,313 [INFO] app.main:41 - Connected to MongoDB database: reminder
+2026-02-04 15:48:57,428 [INFO] app.main:38 - Application startup
+2026-02-04 15:48:57,432 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 15:49:30,612 [INFO] app.main:38 - Application startup
+2026-02-04 15:49:30,647 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 15:49:30,647 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 15:49:50,817 [INFO] app.main:38 - Application startup
+2026-02-04 15:49:50,824 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 15:49:50,824 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 15:50:12,818 [INFO] api.request:29 - request_id=3e89bf84-8a6c-4fb2-b98c-a78bf1160d01 method=GET path=/contacts status=200 duration_ms=8.44 client_ip=172.19.0.1
+2026-02-04 15:53:24,887 [ERROR] api.request:17 - request_id=e59b18ed-19c2-4b5d-8d00-2728b57073c2 method=POST path=/contacts unhandled exception
+Traceback (most recent call last):
+  File "/app/app/middleware/request_logging.py", line 14, in request_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/app/api/routes/contacts.py", line 25, in create_contact
+    created = repo.create_contact(contact_doc)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/app/repositories/contact_repository.py", line 10, in create_contact
+    result = self.collection.insert_one(contact_data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 891, in insert_one
+    self._insert_one(
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 831, in _insert_one
+    self._database.client._retryable_write(
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2083, in _retryable_write
+    return self._retry_with_session(retryable, func, s, bulk, operation, operation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 1968, in _retry_with_session
+    return self._retry_internal(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2014, in _retry_internal
+    ).run()
+      ^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2763, in run
+    return self._read() if self._is_read else self._write()
+                                              ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2895, in _write
+    return self._func(self._session, conn, self._retryable)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 829, in _insert_command
+    _check_write_command_response(result)
+  File "/usr/local/lib/python3.12/site-packages/pymongo/helpers_shared.py", line 322, in _check_write_command_response
+    _raise_last_write_error(write_errors)
+  File "/usr/local/lib/python3.12/site-packages/pymongo/helpers_shared.py", line 292, in _raise_last_write_error
+    raise DuplicateKeyError(error.get("errmsg"), 11000, error)
+pymongo.errors.DuplicateKeyError: E11000 duplicate key error collection: reminder.contacts index: unique_phone_number dup key: { phone_number: "2071234567" }, full error: {'index': 0, 'code': 11000, 'errmsg': 'E11000 duplicate key error collection: reminder.contacts index: unique_phone_number dup key: { phone_number: "2071234567" }', 'keyPattern': {'phone_number': 1}, 'keyValue': {'phone_number': '2071234567'}}
+2026-02-04 15:53:24,891 [INFO] api.request:29 - request_id=e59b18ed-19c2-4b5d-8d00-2728b57073c2 method=POST path=/contacts status=500 duration_ms=10.75 client_ip=172.19.0.1
+2026-02-04 15:53:37,636 [ERROR] api.request:17 - request_id=ca21e17f-d185-48d5-9fed-596aacc79760 method=POST path=/contacts unhandled exception
+Traceback (most recent call last):
+  File "/app/app/middleware/request_logging.py", line 14, in request_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 245, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/app/api/routes/contacts.py", line 25, in create_contact
+    created = repo.create_contact(contact_doc)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/app/repositories/contact_repository.py", line 10, in create_contact
+    result = self.collection.insert_one(contact_data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 891, in insert_one
+    self._insert_one(
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 831, in _insert_one
+    self._database.client._retryable_write(
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2083, in _retryable_write
+    return self._retry_with_session(retryable, func, s, bulk, operation, operation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 1968, in _retry_with_session
+    return self._retry_internal(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2014, in _retry_internal
+    ).run()
+      ^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2763, in run
+    return self._read() if self._is_read else self._write()
+                                              ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 2895, in _write
+    return self._func(self._session, conn, self._retryable)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/pymongo/synchronous/collection.py", line 829, in _insert_command
+    _check_write_command_response(result)
+  File "/usr/local/lib/python3.12/site-packages/pymongo/helpers_shared.py", line 322, in _check_write_command_response
+    _raise_last_write_error(write_errors)
+  File "/usr/local/lib/python3.12/site-packages/pymongo/helpers_shared.py", line 292, in _raise_last_write_error
+    raise DuplicateKeyError(error.get("errmsg"), 11000, error)
+pymongo.errors.DuplicateKeyError: E11000 duplicate key error collection: reminder.contacts index: unique_phone_number dup key: { phone_number: "2071234567" }, full error: {'index': 0, 'code': 11000, 'errmsg': 'E11000 duplicate key error collection: reminder.contacts index: unique_phone_number dup key: { phone_number: "2071234567" }', 'keyPattern': {'phone_number': 1}, 'keyValue': {'phone_number': '2071234567'}}
+2026-02-04 15:53:37,638 [INFO] api.request:29 - request_id=ca21e17f-d185-48d5-9fed-596aacc79760 method=POST path=/contacts status=500 duration_ms=3.91 client_ip=172.19.0.1
+2026-02-04 15:55:46,706 [INFO] app.main:38 - Application startup
+2026-02-04 15:55:46,712 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 15:55:46,712 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 15:55:47,204 [INFO] app.main:38 - Application startup
+2026-02-04 15:55:47,210 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 15:55:47,210 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 15:56:04,238 [INFO] app.main:38 - Application startup
+2026-02-04 15:56:04,245 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 15:56:04,245 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 15:56:22,350 [INFO] app.main:38 - Application startup
+2026-02-04 15:56:22,357 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 15:56:22,357 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 15:57:49,711 [INFO] app.main:38 - Application startup
+2026-02-04 15:57:49,717 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 15:57:49,717 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:01:42,273 [INFO] app.main:38 - Application startup
+2026-02-04 16:01:42,283 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:01:42,283 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:01:54,678 [INFO] api.request:29 - request_id=6e655b45-a8b8-4e89-b4be-f6ad8a54438b method=POST path=/contacts status=409 duration_ms=9.82 client_ip=172.19.0.1
+2026-02-04 16:02:01,896 [INFO] api.request:29 - request_id=7fd7711e-d7f5-4c4b-9c5f-c20e7b34d700 method=GET path=/contacts status=200 duration_ms=2.36 client_ip=172.19.0.1
