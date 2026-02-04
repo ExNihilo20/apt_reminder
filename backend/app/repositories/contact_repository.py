@@ -7,9 +7,8 @@ class ContactRepository:
     
 
     def create_contact(self, contact_data: dict) -> dict:
-        contact_data["created_at"] = datetime.now()
-        self.collection.insert_one(contact_data)
-        return contact_data
+        result = self.collection.insert_one(contact_data)
+        return self.collection.find_one({"_id": result.inserted_id})
     
     def get_all_contacts(self) ->list[dict]:
         contacts = list(

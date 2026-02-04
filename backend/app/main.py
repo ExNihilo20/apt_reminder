@@ -1,35 +1,54 @@
-from fastapi import FastAPI, HTTPException
-import os
-from pymongo import MongoClient
+from fastapi import FastAPI
 import logging
 import time
-from typing import List
+
 from app.logging_config import setup_logging
 from app.middleware.request_logging import request_logging_middleware
-from app.repositories.contact_repository import ContactRepository
-from app.models.contact import CreateContact, ContactResponse
+from app.api.routes.contacts import router as contacts_router
+from app.db.mongo import get_mongo_client
+from app.config import settings
 
 APP_START_TIME = time.time()
 
+# -------------------------------------------------
+# Logging
+# -------------------------------------------------
 setup_logging()
 logger = logging.getLogger(__name__)
 
+# -------------------------------------------------
+# App
+# -------------------------------------------------
 app = FastAPI(title="Appointment Reminder API")
 
 app.middleware("http")(request_logging_middleware)
 
-mongo_uri = os.getenv("MONGO_URI")
-client = MongoClient(mongo_uri)
-db = client.get_database()
-# wiring Mongo connection
-contacts_collection = db["contacts"]
-contact_repo = ContactRepository(contacts_collection)
+# -------------------------------------------------
+# Routers
+# -------------------------------------------------
+app.include_router(contacts_router)
 
+# -------------------------------------------------
+# Startup
+# -------------------------------------------------
+@app.on_event("startup")
+def startup_event():
+    logger.info("Application startup")
+
+    client = get_mongo_client()
+    db = client[settings.MONGO_DB_NAME]
+
+    logger.info("Connected to MongoDB database: %s", db.name)
+
+# -------------------------------------------------
+# Health checks
+# -------------------------------------------------
 def check_mongo_health():
     start = time.time()
     try:
-        # lightweight health check for DB
+        client = get_mongo_client()
         client.admin.command("ping")
+
         latency_ms = (time.time() - start) * 1000
         return {
             "status": "up",
@@ -42,24 +61,19 @@ def check_mongo_health():
             "error": str(e)
         }
 
-@app.on_event("startup")
-def startup_event():
-    logger.info("Application startup")
-    logger.info("Connected to MongoDB database: %s", db.name)
 
 @app.get("/health")
 def health_check():
     return {
-        "status": "ok",
-        "database": db.name
+        "status": "ok"
     }
+
 
 @app.get("/health/detailed")
 def detailed_health_check():
     uptime_seconds = round(time.time() - APP_START_TIME, 2)
 
     mongo_health = check_mongo_health()
-
     overall_status = "ok" if mongo_health["status"] == "up" else "degraded"
 
     logger.info(
@@ -77,70 +91,3 @@ def detailed_health_check():
             "mongo": mongo_health
         }
     }
-
-@app.post("/contacts", response_model=ContactResponse, status_code=201)
-def create_contact(contact: CreateContact):
-    logger.info(
-        "Creating contact firstname=%s lastname=%s phone=%s",
-        contact.firstname,
-        contact.lastname,
-        contact.phone_number
-    )
-
-    contact_dict = contact.dict()
-
-    # Normalize phone number
-    contact_dict["phone_number"] = "".join(
-        filter(str.isdigit, contact_dict["phone_number"])
-    )
-
-    created = contact_repo.create_contact(contact_dict)
-
-    return created
-
-@app.get("/contacts", response_model=List[ContactResponse])
-def get_all_contacts():
-    logger.info("Retrieving all contacts")
-
-    contacts = contact_repo.get_all_contacts()
-    return contacts
-
-@app.get("/contacts/lookup", response_model=ContactResponse)
-def lookup_contact(
-        phone_number: str | None = None,
-        firstname: str | None = None,
-        lastname: str | None = None
-):
-    logger.info(
-        "Lookup contact phone=%s firstname=%s lastname=%s",
-        phone_number,
-        firstname,
-        lastname
-    )
-
-    # 1. lookup by phone number first (highest priority)
-    if phone_number:
-        normalized_phone = "".join(filter(str.isdigit, phone_number))
-        contact = contact_repo.get_by_phone_number(normalized_phone)
-
-        if contact:
-            return contact
-    
-    # 2. Name fallback (requires both names)
-    if firstname and lastname:
-        matches = contact_repo.get_by_name(firstname, lastname)
-
-        if len(matches) == 1:
-            return matches[0]
-    
-        if len(matches) > 1:
-            raise HTTPException(
-                status_code=409,
-                detail="Multiple contacts found with the same name"
-            )
-    
-    #3 Nothing found
-    raise HTTPException(
-        status_code=404,
-        detail="Contact not found"
-    )

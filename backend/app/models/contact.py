@@ -1,16 +1,19 @@
-from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+# app/models/contact.py
 from datetime import datetime
+from typing import Optional
 
-class CreateContact(BaseModel):
+from pydantic import BaseModel, EmailStr, Field
+
+
+class ContactCreate(BaseModel):
     firstname: str = Field(..., min_length=1)
     lastname: str = Field(..., min_length=1)
-    phone_number: str = Field(..., min_length=7)
+    phone_number: str = Field(
+        ...,
+        pattern=r"^\d{10}$",
+        description="10-digit phone number, digits only"
+    )
     email_address: Optional[EmailStr] = None
-
-class ContactResponse(BaseModel):
-    firstname:str
-    lastname:str
-    phone_number:str
-    email_address: Optional[EmailStr]
+    
+class ContactOut(ContactCreate):
     created_at: datetime
