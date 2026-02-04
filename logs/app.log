@@ -653,3 +653,38 @@ pymongo.errors.DuplicateKeyError: E11000 duplicate key error collection: reminde
 2026-02-04 16:34:32,276 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
 2026-02-04 16:34:32,276 [INFO] app.main:43 - Connected to MongoDB database: reminder
 2026-02-04 16:34:40,317 [INFO] api.request:29 - request_id=6f4364b9-d6f9-4246-83d7-2615bee013d6 method=GET path=/contacts status=200 duration_ms=8.11 client_ip=172.19.0.1
+2026-02-04 16:38:45,226 [INFO] app.main:38 - Application startup
+2026-02-04 16:38:45,234 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:38:45,234 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:39:00,855 [INFO] app.main:38 - Application startup
+2026-02-04 16:39:00,862 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:39:00,862 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:39:18,558 [INFO] app.main:38 - Application startup
+2026-02-04 16:39:18,565 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:39:18,565 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:39:31,158 [INFO] app.main:38 - Application startup
+2026-02-04 16:39:31,164 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:39:31,164 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:39:37,066 [INFO] app.main:38 - Application startup
+2026-02-04 16:39:37,073 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:39:37,073 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:39:43,151 [INFO] app.main:38 - Application startup
+2026-02-04 16:39:43,158 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:39:43,158 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:40:14,158 [INFO] app.main:38 - Application startup
+2026-02-04 16:40:14,164 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:40:14,164 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:40:25,869 [INFO] app.main:38 - Application startup
+2026-02-04 16:40:25,876 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:40:25,876 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:40:31,324 [INFO] app.main:38 - Application startup
+2026-02-04 16:40:31,331 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:40:31,331 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:42:16,102 [INFO] app.main:38 - Application startup
+2026-02-04 16:42:16,111 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-04 16:42:16,111 [INFO] app.main:43 - Connected to MongoDB database: reminder
+2026-02-04 16:42:26,020 [INFO] api.request:29 - request_id=c7c871c3-20f9-4309-a9c5-dbb8b2320f0f method=GET path=/contacts/697d630506d921c8e35027ca status=200 duration_ms=9.98 client_ip=172.19.0.1
+2026-02-04 16:42:36,388 [INFO] api.request:29 - request_id=05046c66-aeed-477a-9915-1de1d5e29873 method=GET path=/contacts/697d630506d921c8e35027ca1 status=404 duration_ms=0.69 client_ip=172.19.0.1
+2026-02-04 16:42:41,217 [INFO] api.request:29 - request_id=3c25a01e-a57a-466e-b269-5eafdf933eaa method=GET path=/contacts/697d630506d921c8e35027ca status=200 duration_ms=1.46 client_ip=172.19.0.1
+2026-02-04 16:42:55,918 [INFO] api.request:29 - request_id=12a699cf-91f4-437e-b7bc-bae8b6285760 method=GET path=/contacts/lookup status=404 duration_ms=0.62 client_ip=172.19.0.1
+2026-02-04 17:00:48,851 [INFO] api.request:29 - request_id=6089f2c8-cfb8-4f9d-bc2d-39093ea7e232 method=GET path=/contacts/lookup status=404 duration_ms=0.75 client_ip=172.19.0.1

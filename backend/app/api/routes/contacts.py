@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Path
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime
 from typing import List
@@ -44,3 +44,18 @@ def get_contacts(
 ):
     contacts = repo.get_all_contacts()
     return contacts
+
+@router.get("/{contact_id}", response_model=ContactOut)
+def get_contact_by_id(
+    contact_id: str = Path(..., description="Contact ID"),
+    repo: ContactRepository = Depends(get_contact_repository),
+):
+    contact = repo.get_by_id(contact_id)
+
+    if not contact:
+        raise HTTPException(
+            status_code=404,
+            detail="Contact not found"
+        )
+
+    return contact
