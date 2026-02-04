@@ -5,33 +5,33 @@ class ContactRepository:
     def __init__(self, collection: Collection):
         self.collection = collection
     
+    def _to_public(self, doc: dict) -> dict:
+        doc["id"] = str(doc.pop("_id"))
+        return doc
+
 
     def create_contact(self, contact_data: dict) -> dict:
         result = self.collection.insert_one(contact_data)
-        return self.collection.find_one({"_id": result.inserted_id})
+        doc = self.collection.find_one({"_id": result.inserted_id})
+        return self._to_public(doc)
+
     
     def get_all_contacts(self) ->list[dict]:
-        contacts = list(
-            self.collection.find(
-                {},
-                {"_id": 0} # exclude the Mongo internal ID
-            )
-        )
-        return contacts
+        docs = list(self.collection.find({}))
+        return [self._to_public(doc) for doc in docs]
+
     
     def get_by_phone_number(self, phone_number: str) -> dict | None:
-        return self.collection.find_one(
-            {"phone_number": phone_number},
-            {"_id": 0}
-        )
+        doc = self.collection.find_one({"phone_number": phone_number})
+        if doc:
+            return self._to_public(doc)
+        return None
+
     
     def get_by_name(self, firstname: str, lastname:str) -> list[dict]:
-        return list(
+        docs = list(
             self.collection.find(
-                {
-                    "firstname": firstname,
-                    "lastname": lastname
-                },
-                {"_id": 0}
+                {"firstname": firstname, "lastname": lastname}
             )
         )
+        return [self._to_public(doc) for doc in docs]

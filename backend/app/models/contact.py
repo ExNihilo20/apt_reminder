@@ -1,7 +1,6 @@
 # app/models/contact.py
 from datetime import datetime
 from typing import Optional
-
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -16,4 +15,5 @@ class ContactCreate(BaseModel):
     email_address: Optional[EmailStr] = None
     
 class ContactOut(ContactCreate):
+    id: str
     created_at: datetime
