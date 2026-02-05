@@ -4,8 +4,8 @@ from datetime import datetime
 from typing import List
 
 from app.models.contact import ContactCreate, ContactOut
-from app.api.dependencies.contacts import get_contact_repository
 from app.repositories.contact_repository import ContactRepository
+from app.db.mongo import get_database
 
 router = APIRouter(
     prefix="/contacts",
@@ -14,10 +14,14 @@ router = APIRouter(
 
 
 @router.post("", response_model=ContactOut, status_code=201)
-def create_contact(
-    contact: ContactCreate,
-    repo: ContactRepository = Depends(get_contact_repository),
-):
+
+def get_repo() -> ContactRepository:
+    db = get_database()
+    return ContactRepository(db.contacts)
+
+def create_contact(contact: ContactCreate):
+    repo = get_repo()
+
     contact_doc = contact.model_dump()
     contact_doc["created_at"] = datetime.utcnow()
 
@@ -38,18 +42,18 @@ def create_contact(
     return created
 
 
+
 @router.get("", response_model=List[ContactOut])
-def get_contacts(
-    repo: ContactRepository = Depends(get_contact_repository),
-):
+def get_contacts():
+    repo = get_repo()
     contacts = repo.get_all_contacts()
     return contacts
 
 @router.get("/{contact_id}", response_model=ContactOut)
 def get_contact_by_id(
-    contact_id: str = Path(..., description="Contact ID"),
-    repo: ContactRepository = Depends(get_contact_repository),
+    contact_id: str = Path(..., description="Contact ID")
 ):
+    repo = get_repo()
     contact = repo.get_by_id(contact_id)
 
     if not contact:
