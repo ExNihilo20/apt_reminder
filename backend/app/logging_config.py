@@ -2,11 +2,15 @@ import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from app.core.config import get_settings
+from app.core.settings import get_settings
 
 
-LOG_DIR = Path("/logs")
-LOG_FILE = LOG_DIR / "app.log"
+
+
+def get_log_dir(settings):
+    if settings.environment == "dev":
+        return Path("./logs")
+    return Path("/logs")
 
 
 def setup_logging() -> None:
@@ -18,7 +22,9 @@ def setup_logging() -> None:
     - Safe to call multiple times
     """
     settings = get_settings()
-    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_dir = get_log_dir(settings)
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = log_dir / "app.log"
 
     log_level = settings.log_level.upper()
 
@@ -37,7 +43,7 @@ def setup_logging() -> None:
     # Handlers
     # -----------------------------
     file_handler = RotatingFileHandler(
-        LOG_FILE,
+        log_file,
         maxBytes=100 * 1024 * 1024,  # 100 MB
         backupCount=5,
     )

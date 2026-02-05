@@ -12,12 +12,6 @@ from app.db.indexes import ensure_contact_indexes
 APP_START_TIME = time.time()
 
 # -------------------------------------------------
-# Logging
-# -------------------------------------------------
-setup_logging()
-logger = logging.getLogger(__name__)
-
-# -------------------------------------------------
 # App
 # -------------------------------------------------
 @asynccontextmanager
@@ -25,6 +19,9 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
 
     # Startup
+    setup_logging(settings)   # logging
+    logger = logging.getLogger(__name__) # logging
+
     client = create_mongo_client(settings)
     app.state.mongo_client = client
     app.state.db = client[settings.mongo_db_name]
