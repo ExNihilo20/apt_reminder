@@ -7,8 +7,7 @@ from app.middleware.request_logging import request_logging_middleware
 from app.api.routes.contacts import router as contacts_router
 from app.db.mongo import get_mongo_client
 from app.db.indexes import ensure_contact_indexes
-from app.db.mongo import get_contacts_collection
-from app.config import settings
+from app.db.mongo import get_database
 
 APP_START_TIME = time.time()
 
@@ -37,12 +36,14 @@ app.include_router(contacts_router)
 def startup_event():
     logger.info("Application startup")
 
-    collection = get_contacts_collection()
-    ensure_contact_indexes(collection)
+    db = get_database()
+    contacts_collection = db["contacts"]
+
+    ensure_contact_indexes(contacts_collection)
 
     logger.info(
         "Connected to MongoDB database: %s",
-        collection.database.name
+        db.name
     )
 
 # -------------------------------------------------

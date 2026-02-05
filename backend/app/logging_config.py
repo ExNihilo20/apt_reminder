@@ -1,37 +1,69 @@
 import logging
 from logging.handlers import RotatingFileHandler
-import os
+from pathlib import Path
 
-LOG_DIR = "/logs"
-LOG_FILE = os.path.join(LOG_DIR, "app.log")
+from app.core.config import get_settings
 
-def setup_logging():
-    os.makedirs(LOG_DIR, exist_ok=True)
 
-    log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+LOG_DIR = Path("/logs")
+LOG_FILE = LOG_DIR / "app.log"
+
+
+def setup_logging() -> None:
+    """
+    Configure application-wide logging.
+
+    - Application logs respect LOG_LEVEL
+    - Noisy third-party libraries are reduced
+    - Safe to call multiple times
+    """
+    settings = get_settings()
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+    log_level = settings.log_level.upper()
 
     formatter = logging.Formatter(
         "%(asctime)s [%(levelname)s] %(name)s:%(lineno)d - %(message)s"
     )
 
-    file_handler = RotatingFileHandler(
-        LOG_FILE,
-        maxBytes=100 * 1024 * 1024,  # 100MB
-        backupCount=5
-    )
-    file_handler.setFormatter(formatter)
-    file_handler.setLevel(log_level)
-
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(formatter)
-    console_handler.setLevel(log_level)
-
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
 
-    if not any(isinstance(h, RotatingFileHandler) for h in root_logger.handlers):
-        root_logger.addHandler(file_handler)
-        root_logger.addHandler(console_handler)
+    # Prevent duplicate handlers (important with reload)
+    if root_logger.handlers:
+        return
 
-    # Explicitly enable request logger
+    # -----------------------------
+    # Handlers
+    # -----------------------------
+    file_handler = RotatingFileHandler(
+        LOG_FILE,
+        maxBytes=100 * 1024 * 1024,  # 100 MB
+        backupCount=5,
+    )
+    file_handler.setLevel(log_level)
+    file_handler.setFormatter(formatter)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(log_level)
+    console_handler.setFormatter(formatter)
+
+    root_logger.addHandler(file_handler)
+    root_logger.addHandler(console_handler)
+
+    # -----------------------------
+    # Quiet noisy libraries
+    # -----------------------------
+    logging.getLogger("pymongo").setLevel(logging.INFO)
+    logging.getLogger("pymongo.serverSelection").setLevel(logging.WARNING)
+
+    logging.getLogger("uvicorn").setLevel(logging.INFO)
+    logging.getLogger("uvicorn.error").setLevel(logging.INFO)
+    logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
+
+    logging.getLogger("watchfiles").setLevel(logging.WARNING)
+
+    # -----------------------------
+    # Explicit app loggers
+    # -----------------------------
     logging.getLogger("api.request").setLevel(log_level)

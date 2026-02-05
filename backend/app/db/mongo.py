@@ -1,19 +1,26 @@
-from pymongo import MongoClient
-from pymongo.collection import Collection
 
-from app.config import settings  # or however you load env vars
+from pymongo import MongoClient
+from app.core.config import get_settings
 
 _client: MongoClient | None = None
 
 
 def get_mongo_client() -> MongoClient:
+    """
+    Lazily create and return a MongoDB client.
+    This ensures settings are loaded only when needed.
+    """
     global _client
+
     if _client is None:
-        _client = MongoClient(settings.MONGO_URI)
+        settings = get_settings()
+        _client = MongoClient(settings.mongo_uri)
+
     return _client
 
 
-def get_contacts_collection() -> Collection:
+def get_database():
+    settings = get_settings()
     client = get_mongo_client()
-    db = client[settings.MONGO_DB_NAME]
-    return db["contacts"]
+    return client[settings.mongo_db_name]
+
