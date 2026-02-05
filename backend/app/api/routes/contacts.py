@@ -1,29 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, Path, Request
+from fastapi import APIRouter, Depends, HTTPException, Path
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime
 from typing import List
 
 from app.models.contact import ContactCreate, ContactOut
 from app.repositories.contact_repository import ContactRepository
+from app.repositories.dependencies import get_contact_repository
 
 router = APIRouter(
     prefix="/contacts",
     tags=["contacts"]
 )
 
-
 @router.post("", response_model=ContactOut, status_code=201)
-
-def get_repo(request: Request) -> ContactRepository:
-    db = request.app.state.db
-    return ContactRepository(db.contacts)
-
 def create_contact(
         contact: ContactCreate,
-        request: Request,
+        repo: ContactRepository = Depends(get_contact_repository),
 ):
-    repo = get_repo(request)
-
     contact_doc = contact.model_dump()
     contact_doc["created_at"] = datetime.utcnow()
 
@@ -46,17 +39,15 @@ def create_contact(
 
 
 @router.get("", response_model=List[ContactOut])
-def get_contacts(request: Request,):
-    repo = get_repo(request)
+def get_contacts(repo: ContactRepository = Depends(get_contact_repository),):
     contacts = repo.get_all_contacts()
     return contacts
 
 @router.get("/{contact_id}", response_model=ContactOut)
 def get_contact_by_id(
-    request: Request,
     contact_id: str = Path(..., description="Contact ID"),
+    repo: ContactRepository = Depends(get_contact_repository),
 ):
-    repo = get_repo(request)
     contact = repo.get_by_id(contact_id)
 
     if not contact:

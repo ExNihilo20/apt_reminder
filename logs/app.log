@@ -1239,3 +1239,58 @@ NameError: name 'get_contacts_collection' is not defined
 2026-02-05 14:49:53,684 [INFO] api.request:29 - request_id=a67f79ee-23a5-46e3-9041-533e29f4226f method=GET path=/contacts/lookup status=404 duration_ms=1.25 client_ip=172.19.0.1
 2026-02-05 14:50:03,991 [INFO] api.request:29 - request_id=74f30fb9-afc2-4108-b266-d427db5f8183 method=GET path=/contacts status=200 duration_ms=1.68 client_ip=172.19.0.1
 2026-02-05 14:50:19,898 [INFO] api.request:29 - request_id=39536828-0831-4209-ae82-8050ac748438 method=GET path=/contacts/697d630506d921c8e35027ca status=200 duration_ms=2.73 client_ip=172.19.0.1
+2026-02-05 14:53:31,480 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:53:52,658 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:53:56,454 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:54:01,885 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:54:02,483 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:54:27,070 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:54:43,694 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:54:49,127 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:54:53,717 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:02,339 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:04,264 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:06,531 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:11,035 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:14,501 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:19,999 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:27,022 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:28,734 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:34,476 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:37,868 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:55:44,868 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:56:15,916 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:56:17,879 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:56:37,265 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:56:40,101 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:56:44,186 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:58:19,529 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:58:20,080 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:58:52,851 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:58:53,344 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:59:15,374 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:59:32,500 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:59:54,734 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:59:56,489 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:59:58,838 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:00,541 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:05,802 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:08,481 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:11,649 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:16,101 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:21,633 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:24,121 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:25,735 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:00:26,264 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:01:36,838 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:01:37,971 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:01:49,771 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:01:59,064 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:01:59,590 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:02:27,366 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:02:29,562 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:02:30,112 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:03:48,543 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 15:03:57,362 [INFO] api.request:29 - request_id=8a9d6336-48d7-4ee0-9c46-9db512e01396 method=GET path=/contacts/697d630506d921c8e35027ca status=200 duration_ms=9.04 client_ip=172.19.0.1
+2026-02-05 15:04:00,950 [INFO] api.request:29 - request_id=615cc1ac-9da2-4338-9149-06c0e6748fc3 method=GET path=/contacts status=200 duration_ms=2.43 client_ip=172.19.0.1
+2026-02-05 15:04:04,765 [INFO] api.request:29 - request_id=bef4c751-1758-4456-b01e-9f1417c525c7 method=POST path=/contacts status=409 duration_ms=7.44 client_ip=172.19.0.1
