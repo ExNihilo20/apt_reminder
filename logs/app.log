@@ -1220,3 +1220,22 @@ NameError: name 'get_contacts_collection' is not defined
 2026-02-05 13:32:48,140 [INFO] app.main:44 - Connected to MongoDB database: reminder
 2026-02-05 13:33:02,222 [INFO] api.request:29 - request_id=db6220da-28ba-4456-bf2b-4ef175cad399 method=GET path=/contacts/lookup status=404 duration_ms=1.48 client_ip=172.19.0.1
 2026-02-05 13:33:06,679 [INFO] api.request:29 - request_id=0e0c76f5-da4c-4458-9c0e-3921fa4bd992 method=GET path=/contacts status=200 duration_ms=10.52 client_ip=172.19.0.1
+2026-02-05 14:32:03,213 [INFO] app.main:37 - Application startup
+2026-02-05 14:32:03,228 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:32:03,228 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 14:32:04,739 [INFO] app.main:38 - Application startup
+2026-02-05 14:32:04,746 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:32:04,746 [INFO] app.main:45 - Connected to MongoDB database: reminder
+2026-02-05 14:32:06,652 [INFO] app.main:37 - Application startup
+2026-02-05 14:32:06,659 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:32:06,659 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 14:48:07,257 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:48:08,500 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:48:35,503 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:48:49,717 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:49:13,691 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:49:37,517 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 14:49:47,070 [INFO] api.request:29 - request_id=43d66885-b3a5-40bb-97ed-349842dbffb2 method=GET path=/contacts status=200 duration_ms=9.67 client_ip=172.19.0.1
+2026-02-05 14:49:53,684 [INFO] api.request:29 - request_id=a67f79ee-23a5-46e3-9041-533e29f4226f method=GET path=/contacts/lookup status=404 duration_ms=1.25 client_ip=172.19.0.1
+2026-02-05 14:50:03,991 [INFO] api.request:29 - request_id=74f30fb9-afc2-4108-b266-d427db5f8183 method=GET path=/contacts status=200 duration_ms=1.68 client_ip=172.19.0.1
+2026-02-05 14:50:19,898 [INFO] api.request:29 - request_id=39536828-0831-4209-ae82-8050ac748438 method=GET path=/contacts/697d630506d921c8e35027ca status=200 duration_ms=2.73 client_ip=172.19.0.1

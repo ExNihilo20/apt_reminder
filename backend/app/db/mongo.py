@@ -1,26 +1,10 @@
-
 from pymongo import MongoClient
-from app.core.config import get_settings
-
-_client: MongoClient | None = None
+from app.core.settings import Settings
 
 
-def get_mongo_client() -> MongoClient:
-    """
-    Lazily create and return a MongoDB client.
-    This ensures settings are loaded only when needed.
-    """
-    global _client
-
-    if _client is None:
-        settings = get_settings()
-        _client = MongoClient(settings.mongo_uri)
-
-    return _client
+def create_mongo_client(settings: Settings) -> MongoClient:
+    return MongoClient(settings.mongo_uri)
 
 
-def get_database():
-    settings = get_settings()
-    client = get_mongo_client()
-    return client[settings.mongo_db_name]
-
+def close_mongo_client(client: MongoClient) -> None:
+    client.close()

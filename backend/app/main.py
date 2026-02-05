@@ -1,13 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import logging
 import time
-
+from contextlib import asynccontextmanager
+from app.core.settings import get_settings
 from app.logging_config import setup_logging
 from app.middleware.request_logging import request_logging_middleware
 from app.api.routes.contacts import router as contacts_router
-from app.db.mongo import get_mongo_client
+from app.db.mongo import create_mongo_client, close_mongo_client
 from app.db.indexes import ensure_contact_indexes
-from app.db.mongo import get_database
 
 APP_START_TIME = time.time()
 
@@ -20,7 +20,23 @@ logger = logging.getLogger(__name__)
 # -------------------------------------------------
 # App
 # -------------------------------------------------
-app = FastAPI(title="Appointment Reminder API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    settings = get_settings()
+
+    # Startup
+    client = create_mongo_client(settings)
+    app.state.mongo_client = client
+    app.state.db = client[settings.mongo_db_name]
+
+    ensure_contact_indexes(app.state.db.contacts)
+
+    yield
+
+    # Shutdown
+    close_mongo_client(client)
+
+app = FastAPI(lifespan=lifespan, title="Appointment Reminder API")
 
 app.middleware("http")(request_logging_middleware)
 
@@ -30,29 +46,12 @@ app.middleware("http")(request_logging_middleware)
 app.include_router(contacts_router)
 
 # -------------------------------------------------
-# Startup
-# -------------------------------------------------
-@app.on_event("startup")
-def startup_event():
-    logger.info("Application startup")
-
-    db = get_database()
-    contacts_collection = db["contacts"]
-
-    ensure_contact_indexes(contacts_collection)
-
-    logger.info(
-        "Connected to MongoDB database: %s",
-        db.name
-    )
-
-# -------------------------------------------------
 # Health checks
 # -------------------------------------------------
-def check_mongo_health():
+def check_mongo_health(request: Request):
     start = time.time()
     try:
-        client = get_mongo_client()
+        client = request.app.state.mongo_client
         client.admin.command("ping")
 
         latency_ms = (time.time() - start) * 1000
@@ -68,6 +67,7 @@ def check_mongo_health():
         }
 
 
+
 @app.get("/health")
 def health_check():
     return {
@@ -76,18 +76,11 @@ def health_check():
 
 
 @app.get("/health/detailed")
-def detailed_health_check():
+def detailed_health_check(request: Request):
     uptime_seconds = round(time.time() - APP_START_TIME, 2)
 
-    mongo_health = check_mongo_health()
+    mongo_health = check_mongo_health(request)
     overall_status = "ok" if mongo_health["status"] == "up" else "degraded"
-
-    logger.info(
-        "Health check detailed status=%s mongo_status=%s uptime=%.2fs",
-        overall_status,
-        mongo_health["status"],
-        uptime_seconds
-    )
 
     return {
         "status": overall_status,
@@ -97,3 +90,4 @@ def detailed_health_check():
             "mongo": mongo_health
         }
     }
+

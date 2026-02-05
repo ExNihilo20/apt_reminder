@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field
+from functools import lru_cache
 
 class Settings(BaseSettings):
     # App
@@ -17,3 +18,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
