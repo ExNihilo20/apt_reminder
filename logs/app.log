@@ -1026,3 +1026,24 @@ pymongo.errors.DuplicateKeyError: E11000 duplicate key error collection: reminde
 2026-02-05 02:19:49,592 [INFO] app.main:37 - Application startup
 2026-02-05 02:19:49,599 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
 2026-02-05 02:19:49,599 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 13:01:04,959 [INFO] app.main:37 - Application startup
+2026-02-05 13:01:04,972 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 13:01:04,972 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 13:02:59,542 [INFO] app.main:37 - Application startup
+2026-02-05 13:02:59,549 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 13:02:59,549 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 13:03:03,579 [INFO] app.main:37 - Application startup
+2026-02-05 13:03:03,586 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 13:03:03,586 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 13:03:07,777 [INFO] app.main:37 - Application startup
+2026-02-05 13:03:07,783 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 13:03:07,783 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 13:03:13,540 [INFO] app.main:37 - Application startup
+2026-02-05 13:03:13,547 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 13:03:13,547 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 13:03:16,864 [INFO] app.main:37 - Application startup
+2026-02-05 13:03:16,872 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 13:03:16,872 [INFO] app.main:44 - Connected to MongoDB database: reminder
+2026-02-05 13:03:18,757 [INFO] app.main:37 - Application startup
+2026-02-05 13:03:18,764 [INFO] app.db.indexes:19 - Ensured unique index on contacts.phone_number
+2026-02-05 13:03:18,764 [INFO] app.main:44 - Connected to MongoDB database: reminder
