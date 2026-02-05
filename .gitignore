@@ -1,0 +1,16 @@
+# Python venvs
+.venv/
+venv/
+env/
+
+# Env files
+.env
+
+# Logs
+logs/
+*.log
+
+# Python cache / pytest
+__pycache__/
+*.pyc
+.pytest_cache/
