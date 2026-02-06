@@ -31,6 +31,32 @@ class FakeContactRepository:
 
     def get_by_id(self, contact_id: str):
         return self._data.get(contact_id)
+    
+    def update_contact(self, contact_id: str, updates: dict):
+        if contact_id not in self._data:
+            return None
+
+        self._data[contact_id].update(updates)
+        return self._data[contact_id]
+    
+    def update_contact(self, contact_id: str, updates: dict):
+        contact = self._data.get(contact_id)
+        if not contact or not contact.get("is_active", True):
+            return None
+
+        contact.update(updates)
+        return contact
+
+
+    def soft_delete_contact(self, contact_id: str) -> bool:
+        contact = self._data.get(contact_id)
+        if not contact or not contact.get("is_active", True):
+            return False
+
+        contact["is_active"] = False
+        return True
+
+
 
 
 @pytest.fixture

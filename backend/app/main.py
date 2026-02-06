@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
 
     # Startup
-    setup_logging(settings)   # logging
+    setup_logging()   # logging
     logger = logging.getLogger(__name__) # logging
 
     client = create_mongo_client(settings)

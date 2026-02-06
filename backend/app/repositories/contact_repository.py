@@ -49,3 +49,38 @@ class ContactRepository:
             )
         )
         return [self._to_public(doc) for doc in docs]
+    
+    def update_contact(self, contact_id: str, updates: dict):
+        try:
+            oid = ObjectId(contact_id)
+        except InvalidId:
+            return None
+
+        # Never allow these to be updated
+        updates.pop("id", None)
+        updates.pop("_id", None)
+
+        result = self.collection.find_one_and_update(
+            {"_id": oid, "is_active": True},
+            {"$set": updates},
+            return_document=True,
+        )
+
+        if not result:
+            return None
+
+        result["id"] = str(result["_id"])
+        return result
+
+    def soft_delete_contact(self, contact_id: str) -> bool:
+        try:
+            oid = ObjectId(contact_id)
+        except InvalidId:
+            return False
+
+        result = self.collection.update_one(
+            {"_id": oid, "is_active": True},
+            {"$set": {"is_active": False}},
+        )
+
+        return result.modified_count == 1

@@ -12,7 +12,11 @@ class ContactCreate(BaseModel):
         pattern=r"^\d{10}$",
         description="10-digit phone number, digits only"
     )
-    email_address: Optional[EmailStr] = None
+    email_address: Optional[EmailStr] = Field(None, alias="email")
+    is_active: bool = True
+
+    class Config:
+        populate_by_name = True
     
 class ContactOut(ContactCreate):
     id: str

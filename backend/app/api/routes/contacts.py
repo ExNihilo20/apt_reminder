@@ -57,3 +57,26 @@ def get_contact_by_id(
         )
 
     return contact
+
+@router.put("/{contact_id}", response_model=ContactOut)
+def update_contact(
+    contact_id: str,
+    contact: ContactCreate,
+    repo: ContactRepository = Depends(get_contact_repository),
+    ):
+    updated = repo.update_contact(contact_id, contact.model_dump())
+
+    if not updated:
+        raise HTTPException(status_code=404, detail="Contact not found")
+
+    return updated
+
+@router.delete("/{contact_id}", status_code=204)
+def delete_contact(
+    contact_id: str,
+    repo: ContactRepository = Depends(get_contact_repository),
+    ):
+    deleted = repo.soft_delete_contact(contact_id)
+
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Contact not found")
