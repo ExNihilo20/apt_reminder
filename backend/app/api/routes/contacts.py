@@ -71,8 +71,8 @@ def update_contact(
 
     return updated
 
-@router.delete("/{contact_id}", status_code=204)
-def delete_contact(
+@router.delete("/deactivate/{contact_id}", status_code=204)
+def deactivate_contact(
     contact_id: str,
     repo: ContactRepository = Depends(get_contact_repository),
     ):
@@ -80,3 +80,4 @@ def delete_contact(
 
     if not deleted:
         raise HTTPException(status_code=404, detail="Contact not found")
+
