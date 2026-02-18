@@ -16,12 +16,14 @@ APP_START_TIME = time.time()
 # -------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    settings = get_settings()
-
     # Startup
+
+    # create settings
+    settings = get_settings()
+    # logs
     setup_logging()   # logging
     logger = logging.getLogger(__name__) # logging
-
+    # create/configure db client
     client = create_mongo_client(settings)
     app.state.mongo_client = client
     app.state.db = client[settings.mongo_db_name]
@@ -67,6 +69,9 @@ def check_mongo_health(request: Request):
 
 @app.get("/health")
 def health_check():
+    """
+    Very generic health check returned in JSON format.
+    """
     return {
         "status": "ok"
     }
