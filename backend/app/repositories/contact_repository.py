@@ -84,3 +84,14 @@ class ContactRepository:
         )
 
         return result.modified_count == 1
+
+    def hard_delete_contact(self, contact_id: str) -> bool:
+        try:
+            oid = ObjectId(contact_id)
+        except InvalidId:
+            return False
+        
+        result = self.collection.delete_one(
+            {"_id": oid}
+        )
+        return result.deleted_count == 1

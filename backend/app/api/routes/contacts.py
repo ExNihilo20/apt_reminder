@@ -79,5 +79,14 @@ def deactivate_contact(
     deleted = repo.soft_delete_contact(contact_id)
 
     if not deleted:
-        raise HTTPException(status_code=404, detail="Contact not found")
+        raise HTTPException(status_code=404, detail="Contact not found or contact not deactivated")
 
+@router.delete("/delete/{contact_id}", status_code=204)
+def delete_contact(
+    contact_id: str,
+    repo: ContactRepository = Depends(get_contact_repository),
+    ):
+    deleted = repo.hard_delete_contact(contact_id)
+
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Contact not found or contact not deleted")
