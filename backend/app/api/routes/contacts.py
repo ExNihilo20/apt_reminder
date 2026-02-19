@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime
 from typing import List
 
-from app.models.contact import ContactCreate, ContactOut
+from app.models.contact import ContactCreate, ContactOut, PaginatedContacts
 from app.repositories.contact_repository import ContactRepository
 from app.repositories.dependencies import get_contact_repository
+from app.core.exceptions import *
 
 router = APIRouter(
     prefix="/contacts",
@@ -36,11 +37,18 @@ def create_contact(
 
     return created
 
-
-
-@router.get("", response_model=List[ContactOut])
-def get_contacts(repo: ContactRepository = Depends(get_contact_repository),):
-    contacts = repo.get_all_contacts()
+@router.get("", response_model=PaginatedContacts)
+def get_contacts(
+     skip: int = Query(0, ge=0),
+     limit: int = Query(20, ge=1, le=100),
+     is_active: bool = Query(True),
+     repo: ContactRepository = Depends(get_contact_repository)   
+):
+    contacts = repo.get_contacts(
+        skip=skip,
+        limit=limit,
+        is_active=is_active
+    )
     return contacts
 
 @router.get("/{contact_id}", response_model=ContactOut)
@@ -71,12 +79,28 @@ def update_contact(
 
     return updated
 
-@router.delete("/{contact_id}", status_code=204)
-def delete_contact(
+@router.delete("/deactivate/{contact_id}", status_code=204)
+def deactivate_contact(
     contact_id: str,
     repo: ContactRepository = Depends(get_contact_repository),
     ):
     deleted = repo.soft_delete_contact(contact_id)
 
     if not deleted:
+        raise HTTPException(status_code=404, detail="Contact not found or contact not deactivated")
+
+@router.delete("/delete/{contact_id}", status_code=204)
+def delete_contact(
+    contact_id: str,
+    repo: ContactRepository = Depends(get_contact_repository),
+    ) -> None:
+    try:
+        repo.hard_delete_contact(contact_id)
+    except InvalidContactId:
+        raise HTTPException(status_code=404, detail="Invalid contact Id")
+    except ContactNotFound:
         raise HTTPException(status_code=404, detail="Contact not found")
+    except ContactDeleteFailed:
+        raise HTTPException(status_code=500, detail="Failed to delete contact")
+
+    return None

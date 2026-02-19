@@ -2,6 +2,7 @@ from datetime import datetime
 from pymongo.collection import Collection
 from bson import ObjectId
 from bson.errors import InvalidId
+from app.core.exceptions import *
 
 class ContactRepository:
     def __init__(self, collection: Collection):
@@ -18,10 +19,49 @@ class ContactRepository:
         doc = self.collection.find_one({"_id": result.inserted_id})
         return self._to_public(doc)
 
-    
-    def get_all_contacts(self) ->list[dict]:
-        docs = list(self.collection.find({}))
-        return [self._to_public(doc) for doc in docs]
+    def get_contacts(
+            self,
+            skip: int = 0,
+            limit: int = 20,
+            is_active: bool = True
+    ) -> dict:
+        """
+        Get contacts with filtering and pagination.
+        
+        :param self: This contacts instance.
+        :param skip: Skip 0 records by default.
+        :type skip: int
+        :param limit: Limit to 20 results by default for pagination.
+        :type limit: int
+        :param is_active: Filters active by default.
+        :type is_active: bool
+        :return: clean, structured data.
+        :rtype: dict
+        """
+        query = {}
+
+        if is_active:
+            query["is_active"] = True
+        
+        total = self.collection.count_documents(query)
+        
+        cursor = (
+            self.collection
+            .find(query)
+            .sort("created_at", -1)
+            .skip(skip)
+            .limit(limit)
+        )
+
+        docs = list(cursor)
+        items = [self._to_public(doc) for doc in docs]
+
+        return {
+            "total": total,
+            "skip": skip,
+            "limit": limit,
+            "items": items,
+        }
     
     def get_by_id(self, contact_id: str) -> dict | None:
         try:
@@ -84,3 +124,19 @@ class ContactRepository:
         )
 
         return result.modified_count == 1
+
+    def hard_delete_contact(self, contact_id: str) -> None:
+        try:
+            oid = ObjectId(contact_id)
+        except InvalidId:
+            raise InvalidContactId()
+        
+        result = self.collection.delete_one(
+            {"_id": oid}
+        )
+
+        if result.deleted_count == 0:
+            raise ContactNotFound()
+        
+        if not result.acknowledged:
+            raise ContactDeleteFailed()
