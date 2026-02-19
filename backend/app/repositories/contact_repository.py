@@ -2,6 +2,7 @@ from datetime import datetime
 from pymongo.collection import Collection
 from bson import ObjectId
 from bson.errors import InvalidId
+from core.exceptions import InvalidContactId, ContactDeleteFailed, ContactNotFound
 
 class ContactRepository:
     def __init__(self, collection: Collection):
@@ -18,9 +19,39 @@ class ContactRepository:
         doc = self.collection.find_one({"_id": result.inserted_id})
         return self._to_public(doc)
 
-    
-    def get_all_contacts(self) ->list[dict]:
-        docs = list(self.collection.find({}))
+    def get_contacts(
+            self,
+            skip: int = 0,
+            limit: int = 20,
+            active_only: bool = True
+    ) -> list[dict]:
+        """
+        Get contacts with filtering and pagination.
+        
+        :param self: This contacts instance.
+        :param skip: Skip 0 records by default.
+        :type skip: int
+        :param limit: Limit to 20 results by default for pagination.
+        :type limit: int
+        :param active_only: Filters active by default.
+        :type active_only: bool
+        :return: clean public docs.
+        :rtype: list[dict]
+        """
+        query = {}
+
+        if active_only:
+            query["is_active"] = True
+        
+        cursor = (
+            self.collection
+            .find(query)
+            .sort("created_at", -1)
+            .skip(skip)
+            .limit(limit)
+        )
+
+        docs = list(cursor)
         return [self._to_public(doc) for doc in docs]
     
     def get_by_id(self, contact_id: str) -> dict | None:
@@ -85,13 +116,18 @@ class ContactRepository:
 
         return result.modified_count == 1
 
-    def hard_delete_contact(self, contact_id: str) -> bool:
+    def hard_delete_contact(self, contact_id: str) -> None:
         try:
             oid = ObjectId(contact_id)
         except InvalidId:
-            return False
+            raise InvalidContactId()
         
         result = self.collection.delete_one(
             {"_id": oid}
         )
-        return result.deleted_count == 1
+
+        if result.deleted_count == 0:
+            raise ContactNotFound()
+        
+        if not result.acknowledged:
+            raise ContactDeleteFailed()
