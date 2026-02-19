@@ -3,10 +3,10 @@ from pymongo.errors import DuplicateKeyError
 from datetime import datetime
 from typing import List
 
-from app.models.contact import ContactCreate, ContactOut
+from app.models.contact import ContactCreate, ContactOut, PaginatedContacts
 from app.repositories.contact_repository import ContactRepository
 from app.repositories.dependencies import get_contact_repository
-from core.exceptions import *
+from app.core.exceptions import *
 
 router = APIRouter(
     prefix="/contacts",
@@ -37,17 +37,17 @@ def create_contact(
 
     return created
 
-@router.get("", response_model=List[ContactOut])
+@router.get("", response_model=PaginatedContacts)
 def get_contacts(
      skip: int = Query(0, ge=0),
      limit: int = Query(20, ge=1, le=100),
-     active_only: bool = Query(True),
+     is_active: bool = Query(True),
      repo: ContactRepository = Depends(get_contact_repository)   
 ):
     contacts = repo.get_contacts(
         skip=skip,
         limit=limit,
-        active_only=active_only
+        is_active=is_active
     )
     return contacts
 
