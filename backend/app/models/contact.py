@@ -3,6 +3,13 @@ from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel, EmailStr, Field
 
+class ContactUpdate(BaseModel):
+    firstname: Optional[str] = None
+    lastname: Optional[str] = None
+    phone_number: Optional[str] = None
+    email_address: Optional[EmailStr] = Field(None, alias="email")
+    is_active: Optional[bool] = None
+
 
 class ContactCreate(BaseModel):
     """
