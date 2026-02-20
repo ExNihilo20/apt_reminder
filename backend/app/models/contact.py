@@ -34,9 +34,10 @@ class ContactCreate(BaseModel):
 class ContactOut(ContactCreate):
     id: str
     created_at: datetime
+    updated_at: datetime
 
 class PaginatedContacts(BaseModel):
     total: int
     skip: int
     limit: int
-    items: List[ContactOut]
+    contacts: List[ContactOut]
