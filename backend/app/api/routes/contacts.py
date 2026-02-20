@@ -20,6 +20,7 @@ def create_contact(
 ):
     contact_doc = contact.model_dump()
     contact_doc["created_at"] = datetime.utcnow()
+    contact_doc["updated_at"] = datetime.utcnow()
 
     try:
         created = repo.create_contact(contact_doc)

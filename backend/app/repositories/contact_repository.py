@@ -54,13 +54,13 @@ class ContactRepository:
         )
 
         docs = list(cursor)
-        items = [self._to_public(doc) for doc in docs]
+        contacts = [self._to_public(doc) for doc in docs]
 
         return {
             "total": total,
             "skip": skip,
             "limit": limit,
-            "items": items,
+            "contacts": contacts,
         }
     
     def get_by_id(self, contact_id: str) -> dict | None:
@@ -99,6 +99,7 @@ class ContactRepository:
         # Never allow these to be updated
         updates.pop("id", None)
         updates.pop("_id", None)
+        updates["updated_at"] = datetime.utcnow()
 
         result = self.collection.find_one_and_update(
             {"_id": oid, "is_active": True},
@@ -120,7 +121,10 @@ class ContactRepository:
 
         result = self.collection.update_one(
             {"_id": oid, "is_active": True},
-            {"$set": {"is_active": False}},
+            {"$set": {
+                "is_active": False,
+                "updated_at": datetime.utcnow(),
+            }}
         )
 
         return result.modified_count == 1
