@@ -29,6 +29,11 @@ class Settings(BaseSettings):
     # logging
     log_level: str = Field(default="INFO")
 
+    # keycloak
+    keycloak_url: str = "http://localhost:8080"
+    keycloak_realm: str = "apt-reminder"
+    keycloak_audience: str = "apt-reminder-dashboard"
+
     # reading env configs
     class Config:
         env_file = ".env"
