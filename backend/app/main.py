@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 import logging
 import time
 from contextlib import asynccontextmanager
@@ -8,6 +8,7 @@ from app.middleware.request_logging import request_logging_middleware
 from app.api.routes.contacts import router as contacts_router
 from app.db.mongo import create_mongo_client, close_mongo_client
 from app.db.indexes import ensure_contact_indexes
+from app.security.keycloak import verify_token
 
 APP_START_TIME = time.time()
 
@@ -93,3 +94,9 @@ def detailed_health_check(request: Request):
         }
     }
 
+@app.get("/api/secure")
+def secure(user=Depends(verify_token)):
+    return {
+        "message": "Secure endpoint",
+        "user": user
+    }
