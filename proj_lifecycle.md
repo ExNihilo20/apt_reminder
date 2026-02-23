@@ -1,58 +1,73 @@
+
 # Appointment Reminder API
 
-This project runs a Dockerized FastAPI + MongoDB backend for managing appointment reminder contacts.
+This project runs a Dockerized FastAPI + MongoDB backend with a production-mode Keycloak (Postgres-backed) identity provider.
 
 The application lifecycle (start, stop, backup, restore) is managed through a custom Perl script: `run_app.pl`.
 
 This ensures:
 
-* Automatic timestamped backups on shutdown
-* Rotating backups (keeps last 5)
-* Restore capability from latest or specific backup
-* Backups stored safely on the host filesystem (outside project directory)
-* Protection from accidental `docker compose down -v` data loss
+- Automatic Mongo backups on shutdown  
+- Automatic Keycloak realm exports on shutdown  
+- Rotating backups (keeps last 5)  
+- Full restore capability (Mongo + Keycloak)  
+- Postgres bind-mounted persistence  
+- Protection from accidental `docker compose down -v`  
+- Full disaster recovery validation  
 
 ---
+
+## NOTE:
+Run this to give yourself ownership of the keycloak db if applicable:
+```bash
+sudo chown -R $USER:$USER ../keycloak_db
+```
+`You only need to run this command once.` Doing this allows the database folder and contents to be deleted for a safe re-creation in the event a restore is required. 
 
 # 📦 Project Structure
 
 ```
+
 apt_reminder_proj/
 │
-├── backups/                # Timestamped MongoDB backups (host filesystem)
+├── backups/               # Mongo backups (host filesystem)
+├── keycloak_backups/      # Keycloak realm exports
+├── keycloak_db/           # Postgres data (bind mount persistence)
 │
 └── apt_reminder/
-    ├── run_app.pl
-    ├── docker-compose.yml
-    └── ...
-```
+├── run_app.pl
+├── docker-compose.yml
+└── ...
 
-Backups are stored in:
+````
 
-```
-../backups/
-  mongo_YYYYMMDD_HHMMSS.archive.gz
-```
+---
 
-(Resolved relative to `run_app.pl`, independent of current working directory.)
+# 🔐 Data Architecture
+
+| Component | Persistence Type       | Survives `down -v` | Backup Strategy |
+|-----------|------------------------|--------------------|-----------------|
+| Mongo     | Named Docker volume    | ❌                 | `mongodump`     |
+| Keycloak  | Postgres bind mount    | ✅                 | Realm export    |
+| Postgres  | Host directory         | ✅                 | Realm export    |
+
+Containers are fully disposable.
 
 ---
 
 # 🚀 Starting the Application
 
-Build and start the application:
-
 ```bash
 ./run_app.pl start
-```
+````
 
 This will:
 
 1. Build Docker images
-2. Start containers in **detached mode**
-3. Return control to your terminal
+2. Start containers in detached mode
+3. Return control to terminal
 
-To view logs:
+View logs:
 
 ```bash
 docker compose logs -f
@@ -62,51 +77,44 @@ docker compose logs -f
 
 # 🛑 Stopping the Application
 
-Stop safely with:
-
 ```bash
 ./run_app.pl stop
 ```
 
 This will:
 
-1. Create a timestamped Mongo backup (if Mongo is running)
-2. Rotate old backups (keep last 5)
-3. Run `docker compose down`
+1. Create Mongo backup
+2. Export all Keycloak realms to JSON
+3. Rotate backups (keep last 5)
+4. Stop containers
 
-If Mongo is not running, backup is skipped safely.
+Backups are skipped safely if containers are not running.
 
 ---
 
-# 💾 Backup Behavior
+# 💾 Backup Locations
 
-Backups are:
-
-* Timestamped
-* Compressed (`.archive.gz`)
-* Stored in `../backups/` (outside project folder)
-* Rotated automatically (keeps latest 5)
-* Verified to ensure non-empty archive
-
-Example backup filename:
+## Mongo
 
 ```
-../backups/mongo_20260222_184530.archive.gz
+../backups/
+  mongo_YYYYMMDD_HHMMSS.archive.gz
 ```
 
-Even if you run:
+## Keycloak
 
-```bash
-docker compose down -v
+```
+../keycloak_backups/
+  keycloak_YYYYMMDD_HHMMSS.json
 ```
 
-Backups remain safe because they live outside Docker volumes and outside the project directory.
+Both are stored outside Docker volumes and outside the application directory.
 
 ---
 
 # 🔄 Restoring Data
 
-## Restore Latest Backup
+## Restore Latest Backups
 
 ```bash
 ./run_app.pl restore
@@ -114,52 +122,63 @@ Backups remain safe because they live outside Docker volumes and outside the pro
 
 This will:
 
-1. Start containers (if needed)
-2. Wait for Mongo to be ready
-3. Drop existing database contents
-4. Restore from the most recent backup
+1. Restore Mongo from latest archive
+2. Reset Postgres data directory
+3. Restart containers
+4. Import latest Keycloak realm export
+
+Full system state is restored automatically.
 
 ---
 
-## Restore From Specific Backup
+## Restore Specific Mongo Backup
 
 ```bash
 ./run_app.pl restore ../backups/mongo_20260222_184530.archive.gz
 ```
 
-The script will:
+Keycloak restore still uses the latest realm export unless customized.
 
-* Start containers
-* Drop the database
-* Restore from the specified archive
+---
+
+# 🧪 Disaster Recovery Validation
+
+The stack has been tested against:
+
+* `docker compose down`
+* `docker compose down -v`
+* Container removal
+* Container recreation
+* Postgres data wipe
+* Full Mongo wipe
+
+All state is recoverable via:
+
+```bash
+./run_app.pl restore
+```
 
 ---
 
 # ⚠️ Important Notes
 
-### 1. Backups Occur Only When Using the Script
+## 1. Use the Script for Lifecycle Management
 
-If you manually run:
-
-```bash
-docker compose down
-```
-
-No backup will occur.
+Manual `docker compose down` does not create backups.
 
 Always use:
 
-```
+```bash
 ./run_app.pl stop
 ```
 
 ---
 
-### 2. Backup Rotation
+## 2. Backup Rotation
 
-By default, only the most recent 5 backups are kept.
+Only the most recent 5 backups are retained.
 
-You can adjust this in `run_app.pl`:
+Adjust in `run_app.pl`:
 
 ```perl
 my $max_backups = 5;
@@ -167,46 +186,80 @@ my $max_backups = 5;
 
 ---
 
-### 3. Restores Use `--drop`
+## 3. Mongo Restores Use `--drop`
 
-Restores use:
+Mongo restore uses:
 
 ```
 mongorestore --drop
 ```
 
-This completely replaces existing data.
+All existing collections are replaced.
 
 ---
 
-# 🧠 Recommended Safe Workflow
+## 4. Keycloak Restore Resets Postgres
+
+During restore:
+
+* Postgres data directory is cleared
+* Containers restart
+* Realm JSON is imported
+
+This ensures clean state restoration.
+
+---
+
+## 🧾 Keycloak Backup Scope
+
+Keycloak backups use realm export (kc.sh export) and include:
+
+- Realms
+- Clients
+- Roles
+- Users
+- User credentials (realm-managed)
+- Mappers and protocol settings
+
+They do not include:
+- Internal Infinispan cache state
+- Runtime cluster state
+
+Realm exports are portable and version-safe across container rebuilds.
+
+## 🔁 Restore Specific Keycloak Backup (Optional)
+
+By default, ./run_app.pl restore restores:
+
+- Latest Mongo backup
+- Latest Keycloak realm export
+
+To manually import a specific Keycloak backup:
+```bash
+docker cp ../keycloak_backups/keycloak_YYYYMMDD_HHMMSS.json reminder_keycloak:/tmp/import.json
+
+docker exec reminder_keycloak \
+  /opt/keycloak/bin/kc.sh import --file /tmp/import.json
+```
+
+# 🧠 Recommended Workflow
 
 Before risky changes:
 
-```
+```bash
 ./run_app.pl stop
 ```
 
 After changes:
 
-```
+```bash
 ./run_app.pl start
 ```
 
 If something breaks:
 
-```
+```bash
 ./run_app.pl restore
 ```
 
----
 
-# 🔧 Manual Backup (Optional)
-
-If you ever want to manually create a backup without stopping:
-
-```bash
-docker exec reminder_mongo mongodump --archive --gzip > ../backups/manual_backup.archive.gz
-```
-
----

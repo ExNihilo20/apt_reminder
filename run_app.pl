@@ -15,6 +15,10 @@ my $max_backups = 5;
 my $script_dir = dirname(abs_path(__FILE__));
 my $backup_dir = File::Spec->catdir($script_dir, "..", "backups");
 
+# keycloak backups
+my $keycloak_container = "reminder_keycloak";
+my $kc_backup_dir = File::Spec->catdir($script_dir, "..", "keycloak_backups");
+
 my $command = shift @ARGV || "start";
 
 if ($command eq "start") {
@@ -110,10 +114,131 @@ sub rotate_backups {
 }
 
 # -------------------------------------------------
+# Keycloak Backup (Realm Export)
+# -------------------------------------------------
+sub create_keycloak_backup {
+
+    make_path($kc_backup_dir) unless -d $kc_backup_dir;
+
+    my $timestamp = localtime->strftime('%Y%m%d_%H%M%S');
+    my $backup_file = File::Spec->catfile(
+        $kc_backup_dir,
+        "keycloak_$timestamp.json"
+    );
+
+    print "Creating Keycloak realm export: $backup_file\n";
+
+    my $tmp_file = "/tmp/keycloak_export.json";
+
+    # Export all realms
+    my $export_cmd = "docker exec $keycloak_container ".
+                     "/opt/keycloak/bin/kc.sh export ".
+                     "--file $tmp_file ".
+                     "--users realm_file";
+
+    if (system($export_cmd) != 0) {
+        print "Keycloak export failed!\n";
+        return 0;
+    }
+
+    # Copy export out of container
+    my $copy_cmd = "docker cp $keycloak_container:$tmp_file $backup_file";
+    if (system($copy_cmd) != 0) {
+        print "Failed to copy Keycloak export!\n";
+        return 0;
+    }
+
+    # Cleanup temp file
+    system("docker exec $keycloak_container rm -f $tmp_file");
+
+    if (-s $backup_file) {
+        print "Keycloak backup successful.\n";
+        rotate_keycloak_backups();
+        return 1;
+    } else {
+        print "Keycloak backup file empty!\n";
+        unlink $backup_file if -f $backup_file;
+        return 0;
+    }
+}
+
+# -------------------------------------------------
+# Rotate Keycloak Backups
+# -------------------------------------------------
+sub rotate_keycloak_backups {
+
+    opendir(my $dh, $kc_backup_dir) or return;
+    my @files = sort grep { /\.json$/ } readdir($dh);
+    closedir($dh);
+
+    while (@files > $max_backups) {
+        my $oldest = shift @files;
+        unlink File::Spec->catfile($kc_backup_dir, $oldest);
+        print "Deleted old Keycloak backup: $oldest\n";
+    }
+}
+
+# -------------------------------------------------
+# Restore Keycloak Realm
+# -------------------------------------------------
+sub restore_keycloak_backup {
+
+    my ($kc_file) = @_;
+
+    unless ($kc_file) {
+        opendir(my $dh, $kc_backup_dir) or die "No Keycloak backups found.\n";
+        my @files = sort grep { /\.json$/ } readdir($dh);
+        closedir($dh);
+
+        die "No Keycloak backups available.\n" unless @files;
+        $kc_file = File::Spec->catfile($kc_backup_dir, $files[-1]);
+        print "Restoring latest Keycloak backup: $kc_file\n";
+    }
+
+    unless (-f $kc_file) {
+        die "Keycloak backup file not found: $kc_file\n";
+    }
+
+    print "Stopping containers before Keycloak restore...\n";
+    system("docker compose down");
+
+    # Wipe Postgres data directory (this resets Keycloak DB)
+    my $pg_data_dir = File::Spec->catdir($script_dir, "..", "keycloak_db");
+    print "Clearing Postgres data directory: $pg_data_dir\n";
+    system("rm -rf $pg_data_dir/*");
+
+    print "Restarting containers for Keycloak import...\n";
+    system("docker compose up -d");
+
+    print "Waiting for Keycloak to be ready...\n";
+    sleep 10;  # simple wait; can improve later
+
+    # Copy JSON into container
+    my $tmp_path = "/tmp/keycloak_import.json";
+    system("docker cp $kc_file $keycloak_container:$tmp_path");
+
+    print "Importing Keycloak realm...\n";
+
+    my $import_cmd = "docker exec $keycloak_container ".
+                     "/opt/keycloak/bin/kc.sh import ".
+                     "--file $tmp_path";
+
+    if (system($import_cmd) == 0) {
+        print "Keycloak restore successful.\n";
+        system("docker exec $keycloak_container rm -f $tmp_path");
+    } else {
+        die "Keycloak restore failed!\n";
+    }
+}
+
+# -------------------------------------------------
 # Safe Shutdown
 # -------------------------------------------------
 sub safe_shutdown {
-    create_backup();
+
+    create_backup();           # Mongo
+    create_keycloak_backup();  # Keycloak
+
     print "Stopping containers...\n";
     system("docker compose down");
 }
@@ -122,20 +247,24 @@ sub safe_shutdown {
 # Restore
 # -------------------------------------------------
 sub restore_backup {
-    my ($file) = @_;
 
-    unless ($file) {
-        opendir(my $dh, $backup_dir) or die "No backups found.\n";
+    my ($mongo_file) = @_;
+
+    # --------------------------
+    # Restore Mongo
+    # --------------------------
+    unless ($mongo_file) {
+        opendir(my $dh, $backup_dir) or die "No Mongo backups found.\n";
         my @files = sort grep { /\.archive\.gz$/ } readdir($dh);
         closedir($dh);
 
-        die "No backups available.\n" unless @files;
-        $file = File::Spec->catfile($backup_dir, $files[-1]);
-        print "Restoring latest backup: $file\n";
+        die "No Mongo backups available.\n" unless @files;
+        $mongo_file = File::Spec->catfile($backup_dir, $files[-1]);
+        print "Restoring latest Mongo backup: $mongo_file\n";
     }
 
-    unless (-f $file) {
-        die "Backup file not found: $file\n";
+    unless (-f $mongo_file) {
+        die "Mongo backup file not found: $mongo_file\n";
     }
 
     print "Starting containers for restore...\n";
@@ -152,15 +281,17 @@ sub restore_backup {
         die "Mongo container failed to start.\n";
     }
 
-    print "Restoring database from $file...\n";
+    print "Restoring Mongo database...\n";
 
-    my $cmd = "docker exec -i $container mongorestore --archive --gzip --drop < $file";
-    if (system($cmd) == 0) {
-        print "Restore successful.\n";
-    }
-    else {
-        die "Restore failed!\n";
-    }
+    my $cmd = "docker exec -i $container mongorestore --archive --gzip --drop < $mongo_file";
+    die "Mongo restore failed!\n" unless system($cmd) == 0;
+
+    print "Mongo restore successful.\n";
+
+    # --------------------------
+    # Restore Keycloak
+    # --------------------------
+    restore_keycloak_backup();
 }
 
 # -------------------------------------------------
