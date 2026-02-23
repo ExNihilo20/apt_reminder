@@ -1,4 +1,3 @@
-
 # Appointment Reminder API
 
 This project runs a Dockerized FastAPI + MongoDB backend for managing appointment reminder contacts.
@@ -10,7 +9,7 @@ This ensures:
 * Automatic timestamped backups on shutdown
 * Rotating backups (keeps last 5)
 * Restore capability from latest or specific backup
-* Backups stored safely on the host filesystem
+* Backups stored safely on the host filesystem (outside project directory)
 * Protection from accidental `docker compose down -v` data loss
 
 ---
@@ -20,18 +19,22 @@ This ensures:
 ```
 apt_reminder_proj/
 │
-├── run_app.pl
-├── docker-compose.yml
 ├── backups/                # Timestamped MongoDB backups (host filesystem)
-└── ...
+│
+└── apt_reminder/
+    ├── run_app.pl
+    ├── docker-compose.yml
+    └── ...
 ```
 
 Backups are stored in:
 
 ```
-backups/
+../backups/
   mongo_YYYYMMDD_HHMMSS.archive.gz
 ```
+
+(Resolved relative to `run_app.pl`, independent of current working directory.)
 
 ---
 
@@ -46,28 +49,20 @@ Build and start the application:
 This will:
 
 1. Build Docker images
-2. Start containers in the foreground
-3. Wait until you stop the app
+2. Start containers in **detached mode**
+3. Return control to your terminal
 
-To stop the app safely:
+To view logs:
 
-Press:
-
+```bash
+docker compose logs -f
 ```
-Ctrl + C
-```
-
-The script will:
-
-1. Create a timestamped Mongo backup
-2. Rotate old backups (keep last 5)
-3. Run `docker compose down`
 
 ---
 
-# 🛑 Stopping the Application Manually
+# 🛑 Stopping the Application
 
-You can also stop safely with:
+Stop safely with:
 
 ```bash
 ./run_app.pl stop
@@ -75,8 +70,11 @@ You can also stop safely with:
 
 This will:
 
-* Create a backup
-* Shut down containers
+1. Create a timestamped Mongo backup (if Mongo is running)
+2. Rotate old backups (keep last 5)
+3. Run `docker compose down`
+
+If Mongo is not running, backup is skipped safely.
 
 ---
 
@@ -86,13 +84,14 @@ Backups are:
 
 * Timestamped
 * Compressed (`.archive.gz`)
-* Stored in the `backups/` folder
+* Stored in `../backups/` (outside project folder)
 * Rotated automatically (keeps latest 5)
+* Verified to ensure non-empty archive
 
 Example backup filename:
 
 ```
-backups/mongo_20260222_184530.archive.gz
+../backups/mongo_20260222_184530.archive.gz
 ```
 
 Even if you run:
@@ -101,7 +100,7 @@ Even if you run:
 docker compose down -v
 ```
 
-Backups are safe because they live on your host filesystem, not inside Docker volumes.
+Backups remain safe because they live outside Docker volumes and outside the project directory.
 
 ---
 
@@ -115,16 +114,17 @@ Backups are safe because they live on your host filesystem, not inside Docker vo
 
 This will:
 
-1. Start Mongo if not running
-2. Drop existing database contents
-3. Restore from the most recent backup
+1. Start containers (if needed)
+2. Wait for Mongo to be ready
+3. Drop existing database contents
+4. Restore from the most recent backup
 
 ---
 
 ## Restore From Specific Backup
 
 ```bash
-./run_app.pl restore backups/mongo_20260222_184530.archive.gz
+./run_app.pl restore ../backups/mongo_20260222_184530.archive.gz
 ```
 
 The script will:
@@ -152,8 +152,6 @@ Always use:
 ```
 ./run_app.pl stop
 ```
-
-or stop via Ctrl+C when started with `run_app.pl start`.
 
 ---
 
@@ -208,18 +206,7 @@ If something breaks:
 If you ever want to manually create a backup without stopping:
 
 ```bash
-docker exec reminder_mongo mongodump --archive --gzip > backups/manual_backup.archive.gz
+docker exec reminder_mongo mongodump --archive --gzip > ../backups/manual_backup.archive.gz
 ```
 
 ---
-
-# 🏆 Summary
-
-This project now includes:
-
-* Persistent Mongo volume
-* Automatic timestamped backups
-* Backup rotation
-* Safe shutdown procedure
-* One-command restore
-* Immunity from accidental `docker compose down -v` data loss
