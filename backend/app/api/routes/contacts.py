@@ -3,7 +3,7 @@ from pymongo.errors import DuplicateKeyError
 from datetime import datetime
 from typing import List
 
-from app.models.contact import ContactCreate, ContactOut, PaginatedContacts
+from app.models.contact import ContactCreate, ContactOut, PaginatedContacts, ContactUpdate
 from app.repositories.contact_repository import ContactRepository
 from app.repositories.dependencies import get_contact_repository
 from app.core.exceptions import *
@@ -18,9 +18,10 @@ def create_contact(
         contact: ContactCreate,
         repo: ContactRepository = Depends(get_contact_repository),
 ):
+    now = datetime.utcnow()
     contact_doc = contact.model_dump()
-    contact_doc["created_at"] = datetime.utcnow()
-    contact_doc["updated_at"] = datetime.utcnow()
+    contact_doc["created_at"] = now
+    contact_doc["updated_at"] = now
 
     try:
         created = repo.create_contact(contact_doc)
@@ -105,3 +106,21 @@ def delete_contact(
         raise HTTPException(status_code=500, detail="Failed to delete contact")
 
     return None
+
+@router.patch("/{contact_id}", response_model=ContactOut)
+def patch_contact(
+    contact_id: str,
+    updates: ContactUpdate,
+    repo: ContactRepository = Depends(get_contact_repository)
+    ):
+    update_data = updates.model_dump(exclude_unset=True)
+
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No fields provided")
+    
+    updated = repo.update_contact(contact_id, update_data)
+
+    if not updated:
+        raise HTTPException(status_code=404, detail="Contact not found")
+    
+    return updated
