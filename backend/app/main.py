@@ -6,8 +6,12 @@ from app.core.settings import get_settings
 from app.logging_config import setup_logging
 from app.middleware.request_logging import request_logging_middleware
 from app.api.routes.contacts import router as contacts_router
+from app.api.routes import message_templates
 from app.db.mongo import create_mongo_client, close_mongo_client
-from app.db.indexes import ensure_contact_indexes
+from app.db.indexes import (
+    ensure_contact_indexes,
+    ensure_message_template_indexes,
+)
 from app.security.keycloak import verify_token
 
 APP_START_TIME = time.time()
@@ -30,7 +34,8 @@ async def lifespan(app: FastAPI):
     app.state.db = client[settings.mongo_db_name]
 
     ensure_contact_indexes(app.state.db.contacts)
-
+    ensure_message_template_indexes(app.state.db.message_templates)
+    
     yield
 
     # Shutdown
@@ -39,11 +44,11 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan, title="Appointment Reminder API")
 
 app.middleware("http")(request_logging_middleware)
-
 # -------------------------------------------------
 # Routers
 # -------------------------------------------------
 app.include_router(contacts_router)
+app.include_router(message_templates.router)
 
 # -------------------------------------------------
 # Health checks

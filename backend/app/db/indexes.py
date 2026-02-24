@@ -30,3 +30,7 @@ def ensure_contact_indexes(collection: Collection) -> None:
     except OperationFailure:
         logger.exception("Failed to create indexes for contacts collection")
         raise
+
+def ensure_message_template_indexes(collection):
+    collection.create_index("name", unique=True)
+    collection.create_index("is_active")
