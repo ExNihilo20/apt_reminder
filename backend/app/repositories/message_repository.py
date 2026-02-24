@@ -17,12 +17,12 @@ class MessageRepository:
     def create(self, data: dict) -> dict:
         now = datetime.utcnow()
 
-        data["status"] = "pending"
-        data["provider"] = None
-        data["provider_message_sid"] = None
-        data["rendered_body"] = None
-        data["created_at"] = now
-        data["updated_at"] = now
+        # Only set defaults if not already provided
+        data.setdefault("status", "pending")
+        data.setdefault("provider", None)
+        data.setdefault("provider_message_sid", None)
+        data.setdefault("created_at", now)
+        data.setdefault("updated_at", now)
 
         result = self.collection.insert_one(data)
         doc = self.collection.find_one({"_id": result.inserted_id})

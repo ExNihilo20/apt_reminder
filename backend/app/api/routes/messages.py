@@ -9,6 +9,12 @@ from app.repositories.dependencies import (
     get_message_repository,
     get_contact_repository,
 )
+from app.services.messaging.template_renderer import (
+    TemplateRenderer,
+    TemplateRenderingError,
+)
+from app.repositories.message_template_repository import MessageTemplateRepository
+from app.repositories.dependencies import get_message_template_repository
 from app.repositories.message_repository import MessageRepository
 from app.repositories.contact_repository import ContactRepository
 
@@ -21,13 +27,43 @@ def create_message(
     payload: MessageCreate,
     message_repo: MessageRepository = Depends(get_message_repository),
     contact_repo: ContactRepository = Depends(get_contact_repository),
+    template_repo: MessageTemplateRepository = Depends(get_message_template_repository),
 ):
-    # Ensure contact exists
+    # Validate contact
     contact = contact_repo.get_by_id(payload.contact_id)
     if not contact:
         raise HTTPException(status_code=404, detail="Contact not found")
 
-    return message_repo.create(payload.dict())
+    rendered_body = None
+
+    # If using template
+    if payload.template_id:
+        template = template_repo.get_by_id(payload.template_id)
+        if not template:
+            raise HTTPException(status_code=404, detail="Template not found")
+
+        try:
+            rendered_body = TemplateRenderer.render(
+                template["body"],
+                payload.variables,
+            )
+        except TemplateRenderingError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+    # If raw body provided
+    elif payload.body:
+        rendered_body = payload.body
+
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail="Either template_id or body must be provided"
+        )
+
+    message_data = payload.dict()
+    message_data["rendered_body"] = rendered_body
+
+    return message_repo.create(message_data)
 
 
 @router.get("", response_model=PaginatedMessages)

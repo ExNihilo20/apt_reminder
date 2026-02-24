@@ -8,6 +8,7 @@ class MessageBase(BaseModel):
     contact_id: str
     channel: str = Field(default="sms", description="sms | email")
     body: Optional[str] = None
+    template_id: Optional[str] = None
     variables: Optional[Dict[str, str]] = None
 
 
