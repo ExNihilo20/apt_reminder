@@ -2,6 +2,10 @@ from fastapi import Depends
 from app.db.dependencies import get_db
 from app.repositories.contact_repository import ContactRepository
 from app.repositories.message_template_repository import MessageTemplateRepository
+from app.repositories.message_repository import MessageRepository
+
+
+
 
 def get_contact_repository(
     db=Depends(get_db),
@@ -12,3 +16,8 @@ def get_message_template_repository(
     db=Depends(get_db)
 ) -> MessageTemplateRepository:
     return MessageTemplateRepository(db.message_templates) 
+
+def get_message_repository(
+    db=Depends(get_db)
+) -> MessageRepository:
+    return MessageRepository(db.messages)

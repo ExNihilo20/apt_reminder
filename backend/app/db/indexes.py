@@ -34,3 +34,9 @@ def ensure_contact_indexes(collection: Collection) -> None:
 def ensure_message_template_indexes(collection):
     collection.create_index("name", unique=True)
     collection.create_index("is_active")
+    
+def ensure_message_indexes(collection):
+    collection.create_index("contact_id")
+    collection.create_index("status")
+    collection.create_index("provider_message_sid")
+    collection.create_index("created_at")

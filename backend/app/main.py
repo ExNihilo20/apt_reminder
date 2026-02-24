@@ -6,11 +6,12 @@ from app.core.settings import get_settings
 from app.logging_config import setup_logging
 from app.middleware.request_logging import request_logging_middleware
 from app.api.routes.contacts import router as contacts_router
-from app.api.routes import message_templates
+from app.api.routes import message_templates, messages
 from app.db.mongo import create_mongo_client, close_mongo_client
 from app.db.indexes import (
     ensure_contact_indexes,
     ensure_message_template_indexes,
+    ensure_message_indexes
 )
 from app.security.keycloak import verify_token
 
@@ -35,6 +36,7 @@ async def lifespan(app: FastAPI):
 
     ensure_contact_indexes(app.state.db.contacts)
     ensure_message_template_indexes(app.state.db.message_templates)
+    ensure_message_indexes(app.state.db.messages)
     
     yield
 
@@ -49,6 +51,7 @@ app.middleware("http")(request_logging_middleware)
 # -------------------------------------------------
 app.include_router(contacts_router)
 app.include_router(message_templates.router)
+app.include_router(messages.router)
 
 # -------------------------------------------------
 # Health checks
