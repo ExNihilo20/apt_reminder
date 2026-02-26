@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field
 from functools import lru_cache
+from typing import Optional
 
 class Settings(BaseSettings):
     """
@@ -33,6 +34,12 @@ class Settings(BaseSettings):
     keycloak_url: str = "http://localhost:8080"
     keycloak_realm: str = "apt-reminder"
     keycloak_audience: str = "apt-reminder-dashboard"
+
+    # twilio
+    twilio_account_sid: Optional[str] = None
+    twilio_auth_token: Optional[str] = None
+    twilio_from_number: Optional[str] = None
+    twilio_messaging_service_sid: Optional[str] = None
 
     # reading env configs
     class Config:

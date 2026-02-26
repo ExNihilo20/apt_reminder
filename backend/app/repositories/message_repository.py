@@ -37,3 +37,29 @@ class MessageRepository:
         items = [self._to_public(doc) for doc in cursor]
         total = self.collection.count_documents({})
         return items, total
+    
+    def update_status(
+        self,
+        message_id: str,
+        *,
+        status: str,
+        provider: str | None = None,
+        provider_message_sid: str | None = None,
+    ):
+        update_data = {
+            "status": status,
+            "updated_at": datetime.utcnow(),
+        }
+
+        if provider:
+            update_data["provider"] = provider
+
+        if provider_message_sid:
+            update_data["provider_message_sid"] = provider_message_sid
+
+        self.collection.update_one(
+            {"_id": ObjectId(message_id)},
+            {"$set": update_data},
+        )
+
+        return self.get_by_id(message_id)

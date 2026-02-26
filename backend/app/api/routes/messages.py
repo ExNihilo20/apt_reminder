@@ -17,6 +17,8 @@ from app.repositories.message_template_repository import MessageTemplateReposito
 from app.repositories.dependencies import get_message_template_repository
 from app.repositories.message_repository import MessageRepository
 from app.repositories.contact_repository import ContactRepository
+from app.services.messaging.providers.twilio_provider import TwilioProvider
+from app.services.messaging.providers.base import MessageProviderError
 
 
 router = APIRouter(prefix="/messages", tags=["Messages"])
@@ -85,3 +87,50 @@ def get_message(
     if not message:
         raise HTTPException(status_code=404, detail="Message not found")
     return message
+
+@router.post("/{message_id}/send", response_model=MessageOut)
+def send_message(
+    message_id: str,
+    message_repo: MessageRepository = Depends(get_message_repository),
+    contact_repo: ContactRepository = Depends(get_contact_repository),
+):
+    message = message_repo.get_by_id(message_id)
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+
+    if message["status"] != "pending":
+        raise HTTPException(
+            status_code=400,
+            detail="Only pending messages can be sent",
+        )
+
+    contact = contact_repo.get_by_id(message["contact_id"])
+    if not contact:
+        raise HTTPException(status_code=404, detail="Contact not found")
+
+    if not message.get("rendered_body"):
+        raise HTTPException(
+            status_code=400,
+            detail="Message has no rendered body",
+        )
+
+    provider = TwilioProvider()
+
+    try:
+        result = provider.send(
+            to=contact["phone_number"],
+            body=message["rendered_body"],
+        )
+    except MessageProviderError as e:
+        message_repo.update_status(
+            message_id,
+            status="failed",
+        )
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return message_repo.update_status(
+        message_id,
+        status="sent",
+        provider=result["provider"],
+        provider_message_sid=result["provider_message_sid"],
+    )
