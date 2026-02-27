@@ -14,6 +14,7 @@ from app.db.indexes import (
     ensure_message_indexes
 )
 from app.security.keycloak import verify_token
+from fastapi.middleware.cors import CORSMiddleware
 
 APP_START_TIME = time.time()
 
@@ -44,6 +45,15 @@ async def lifespan(app: FastAPI):
     close_mongo_client(client)
 
 app = FastAPI(lifespan=lifespan, title="Appointment Reminder API")
+
+# middleware attachment for FastAPI
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.middleware("http")(request_logging_middleware)
 # -------------------------------------------------

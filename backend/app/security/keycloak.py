@@ -55,9 +55,30 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
             token,
             key,
             algorithms=["RS256"],
-            audience=settings.keycloak_audience,
             issuer=issuer,
+            options={"verify_aud": False},  # we'll validate aud/azp ourselves
+            leeway=30,
         )
+
+        # Accept either aud contains client OR azp equals client
+        expected = settings.keycloak_audience
+
+        aud = payload.get("aud")
+        azp = payload.get("azp")
+
+        aud_ok = False
+        if isinstance(aud, str):
+            aud_ok = (aud == expected)
+        elif isinstance(aud, list):
+            aud_ok = (expected in aud)
+
+        azp_ok = (azp == expected)
+
+        if not (aud_ok or azp_ok):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token audience",
+            )
 
         return payload
 
